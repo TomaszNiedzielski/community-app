@@ -6,7 +6,7 @@ export const storeUser = async (user: UserProps) => {
     await AsyncStorage.setItem('user', JSON.stringify(user));
 }
 
-export const getUser = async () => {
+export const restoreUser = async () => {
     const userData = await AsyncStorage.getItem('user');
 
     if (userData) {

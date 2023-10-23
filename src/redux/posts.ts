@@ -34,7 +34,7 @@ export interface PostProps {
     image: string;
     likesCount: number;
     viewsCount?: number;
-    comments?: {
+    comments: {
         count: number;
         items: PostProps[];
     };
@@ -115,10 +115,11 @@ const postsSlice = createSlice({
             }
         },
         updatePost: (state, action) => {
-            state.data.forEach(item => {
-                if (item.id === action.payload.post.id) {
-                    item = action.payload.post;
+            state.data = state.data.map(item => {
+                if (item.id === action.payload.id) {
+                    item = action.payload;
                 }
+                return item;
             });
         },
         resetPosts: () => {

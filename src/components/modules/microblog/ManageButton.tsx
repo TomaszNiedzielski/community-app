@@ -1,16 +1,18 @@
 import { StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/Entypo';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Colors from '../../../constants/Colors';
 // import { setBottomSheetVisibility } from '../../../redux/bottomSheet';
 import { PostProps } from '../../../redux/posts';
+import { RootState } from '../../../redux/store';
 
 interface Props {
     postId: PostProps['id'];
 }
 
 const ManageButton: React.FC<Props> = ({ postId }) => {
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
+    const theme = useSelector((state: RootState) => state.theme);
 
     return (
         <TouchableOpacity
@@ -19,7 +21,7 @@ const ManageButton: React.FC<Props> = ({ postId }) => {
                 // dispatch(setBottomSheetVisibility({ value: true, componentName: 'PostOptionsSheet', data: { postId } }));
             }}
         >
-            <Icon name="dots-three-vertical" size={16} /* color={Colors.gray} */ />
+            <Icon name="dots-three-vertical" size={16} color={Colors[theme].black} />
         </TouchableOpacity>
     );
 }

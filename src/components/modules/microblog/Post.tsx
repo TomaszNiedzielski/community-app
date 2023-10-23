@@ -4,7 +4,6 @@ import Colors, { Theme } from '../../../constants/Colors';
 import { PostProps } from '../../../redux/posts';
 import PostFooter from './PostFooter';
 import PostHeader from './PostHeader';
-import ShowCommentsButton from './ShowCommentsButton';
 import ScalableImage from '../../common/ScalableImage';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store';
@@ -12,6 +11,7 @@ import { RootState } from '../../../redux/store';
 interface Props extends PostProps {
     type: 'original' | 'comment';
     onReply: (post: PostProps) => void;
+    commentsShown?: boolean;
 }
 
 export const PostWrapper: React.FC<{ children: React.ReactNode; theme: Theme; }> = ({ children, theme }) => {
@@ -31,7 +31,7 @@ const CommentWrapper: React.FC<{ children: React.ReactNode; theme: Theme; }> = (
 }
 
 const Post: React.FC<Props> = React.memo(post => {
-    const { id, user, text, image, likesCount, viewsCount, comments, isLiked, createdAt, type = 'original', onReply } = post;
+    const { id, user, text, image, likesCount, viewsCount, comments, isLiked, createdAt, type = 'original', onReply, commentsShown } = post;
     const theme = useSelector((state: RootState) => state.theme);
 
     /**
@@ -84,18 +84,16 @@ const Post: React.FC<Props> = React.memo(post => {
                 postAuthorId={user.id}
                 onReply={() => onReply(post)}
                 viewsCount={viewsCount}
+                commentsCount={comments?.count}
             />
             {type === 'original' && <View>
-                {comments?.items.length 
-                    ? <><View style={styles.commentsBorder}></View>
+                {comments?.items.length && commentsShown ? <>
+                    <View style={styles.commentsBorder} />
                     <FlatList
                         data={comments.items}
                         renderItem={renderComment}
-                    /></> : null}
-                {(comments?.count && comments.count > 2 && comments.items.length < comments.count) ? <ShowCommentsButton
-                    commentsCount={comments?.count}
-                    postId={id}
-                /> : null}
+                    />
+                </> : null}
             </View>}
         </View>
     );
@@ -104,7 +102,7 @@ const Post: React.FC<Props> = React.memo(post => {
 const styling = (theme: Theme) => StyleSheet.create({
     container: {
         marginTop: 10,
-        backgroundColor: Colors[theme].accent,
+        backgroundColor: Colors[theme].white,
         paddingHorizontal: 15,
         paddingVertical: 20,
         borderRadius: 10,
@@ -117,7 +115,7 @@ const styling = (theme: Theme) => StyleSheet.create({
         borderRadius: 20,
     },
     text: {
-        color: '#fff',
+        color: Colors[theme].black,
         marginTop: 10,
         lineHeight: 19,
     },

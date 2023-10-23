@@ -96,7 +96,7 @@ const styling = (theme: Theme) => StyleSheet.create({
         textAlign: 'center',
         textAlignVertical: 'center',
         backgroundColor: Colors[theme].primary,
-        color: '#fff',
+        color: Colors[theme].black,
         fontSize: 22,
         fontFamily: 'Inter-Bold'
     },

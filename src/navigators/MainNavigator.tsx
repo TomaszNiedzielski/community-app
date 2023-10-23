@@ -11,10 +11,19 @@ const MainNavigator: React.FC = () => {
             <Tab.Screen
                 name="MicroblogNavigator"
                 component={MicroblogNavigator}
+                options={{
+                    headerShown: false,
+                    title: 'Microblog'
+                }}
             />
             <Tab.Screen
                 name="PostCreator"
                 component={PostCreatorScreen}
+                options={{
+                    headerShown: false,
+                    tabBarStyle: { display: 'none' },
+                    title: 'Create Post',
+                }}
             />
             <Tab.Screen
                 name="User"

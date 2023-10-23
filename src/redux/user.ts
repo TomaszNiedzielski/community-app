@@ -68,7 +68,7 @@ const initialState: UserProps = {
     id: 0,
     name: '',
     email: '',
-    token: '',
+    token: '110|60iQl8EvCqDzkY400AyWUX94aWHERx7V6tSQ6l3P',
     avatar: {
         url: '',
         pending: false
