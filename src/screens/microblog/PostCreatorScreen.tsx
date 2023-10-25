@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { View, TextInput, StyleSheet, Text, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Alert } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import Icon from 'react-native-vector-icons/AntDesign';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import Colors, { Theme } from '../../constants/Colors';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
@@ -9,6 +9,7 @@ import PrimaryContainer from '../../components/common/PrimaryContainer';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import api from '../../utils/api';
 import { createPost } from '../../redux/posts';
+import ImagePicker from 'react-native-image-crop-picker';
 
 interface Props {
     navigation: NativeStackNavigationProp<any>;
@@ -16,7 +17,8 @@ interface Props {
 
 const PostCreatorScreen: React.FC<Props> = ({ navigation }) => {
     const [text, setText] = useState('');
-    const [image, setImage] = useState(''); // base64
+    const [imageFile, setImageFile] = useState(''); // base64
+    const [imageName, setImageName] = useState('');
 
     const theme = useSelector((state: RootState) => state.theme);
     const { token } = useSelector((state: RootState) => state.user);
@@ -25,11 +27,11 @@ const PostCreatorScreen: React.FC<Props> = ({ navigation }) => {
     const styles = useMemo(() => styling(theme), [theme]);
 
     const publishPost = () => {
-        if (text === '' && image === '') return;
+        if (text === '' && imageFile === '') return;
 
         api.post('/posts', {
             text,
-            image,
+            image: imageFile,
         }, token)
         .then((res: any) => {
             if (res.data.error) {
@@ -41,9 +43,37 @@ const PostCreatorScreen: React.FC<Props> = ({ navigation }) => {
             dispatch(createPost({ post }));
 
             setText('');
-            setImage('');
+            setImageFile('');
+            setImageName('');
 
             navigation.navigate('Microblog');
+        });
+    }
+
+    const openPicker = () => {
+        ImagePicker.openPicker({
+            includeBase64: true,
+            mediaType: 'photo',
+        })
+        .then(image => {
+            if (image.size > 10000000) {
+                Alert.alert('The image cannot be larger than 10MB.');
+            }
+
+            const NAME_LENGTH = 15;
+            const name = image.path.split('/').pop() as string;
+
+            if (name.length > NAME_LENGTH) {
+                const ext = name.split('.').pop() as string;
+                const nameWithoutExt = name.substring(0, name.length - 4);
+                const firstPart = nameWithoutExt.substring(0, NAME_LENGTH - 4);
+                const lastPart = nameWithoutExt.substring(nameWithoutExt.length - 4, nameWithoutExt.length + 1);
+                setImageName(firstPart + '...' + lastPart + '.' + ext);
+            } else {
+                setImageName(name);
+            }
+
+            setImageFile(image.data || '');
         });
     }
 
@@ -66,6 +96,13 @@ const PostCreatorScreen: React.FC<Props> = ({ navigation }) => {
                             />
                         </KeyboardAwareScrollView>
                         <View style={styles.footer}>
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <TouchableOpacity onPress={openPicker}>
+                                    <Icon name="image" size={26} />
+                                </TouchableOpacity>
+                                <Text style={{ marginLeft: 10 }}>{imageName}</Text>
+                            </View>
+                            
                             <TouchableOpacity onPress={publishPost}>
                                 <Text style={styles.publish}>Publish</Text>
                             </TouchableOpacity>
@@ -100,7 +137,7 @@ const styling = (theme: Theme) => StyleSheet.create({
     footer: {
         height: 50,
         flexDirection: 'row',
-        justifyContent: 'flex-end',
+        justifyContent: 'space-between',
         alignItems: 'center',
         paddingHorizontal: 20,
         borderTopWidth: 1,

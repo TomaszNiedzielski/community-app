@@ -22,6 +22,15 @@ export const fetchPosts = createAsyncThunk(
     }
 );
 
+export const deletePost = createAsyncThunk(
+    'posts/delete',
+    async ({ id, token }: FetchPostsProps) => {
+        await api.delete(`/posts/${id}`, token);
+
+        return { postId: id };
+    }
+);
+
 export interface PostProps {
     id: number | string;
     user: {
@@ -92,21 +101,6 @@ const postsSlice = createSlice({
                 }
             }
         },
-        deletePost: (state, action) => {
-            const updatedData = state.data.filter(post => post.id !== action.payload.postId);
-
-            if (updatedData.length !== state.data.length) {
-                state.data = updatedData;
-            }
-
-            // Check if post is in comments
-            state.data.map(post => {
-                if (post.comments) {
-                    post.comments.items = post.comments.items.filter(comment => comment.id !== action.payload.postId);
-                    post.comments.count--;
-                }
-            });
-        },
         setAllComments: (state, action) => {
             const post = state.data.find(post => post.id === action.payload.postId);
             
@@ -153,11 +147,30 @@ const postsSlice = createSlice({
             .addCase(fetchPosts.rejected, (state) => {
                 state.reloading = false;
                 state.loading = false;
-            });
+            })
+            .addCase(deletePost.fulfilled, (state, action) => {
+                const updatedData = state.data.filter(post => post.id !== action.payload.postId);
+
+                if (updatedData.length !== state.data.length) {
+                    state.data = updatedData;
+                }
+
+                // Check if post is in comments
+                state.data.map(post => {
+                    if (post.comments) {
+                        const updatedItems = post.comments.items.filter(comment => comment.id !== action.payload.postId);
+
+                        if (updatedItems.length !== post.comments.items.length) {
+                            post.comments.items = updatedItems;
+                            post.comments.count--;
+                        }
+                    }
+                });
+            })
     }
 });
 
-export const { createPost, createComment, likeThePost, deletePost, setAllComments, updatePost, resetPosts, resetPage } = postsSlice.actions;
+export const { createPost, createComment, likeThePost, setAllComments, updatePost, resetPosts, resetPage } = postsSlice.actions;
 
 export default postsSlice.reducer;
 
