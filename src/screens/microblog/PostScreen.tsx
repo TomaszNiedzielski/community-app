@@ -20,7 +20,7 @@ const PostScreen: React.FC<Props> = ({ route }) => {
 
     const theme = useSelector((state: RootState) => state.theme);
     const { token } = useSelector((state: RootState) => state.user);
-    const post = useSelector((state: RootState) => state.posts.data.find(({ id }) => id === route.params?.postId));
+    const post = useSelector((state: RootState) => state.posts.microblog.data.find(({ id }) => id === route.params?.postId));
 
     const dispatch = useDispatch();
     const styles = useMemo(() => styling(theme), [theme]);
@@ -54,6 +54,7 @@ const PostScreen: React.FC<Props> = ({ route }) => {
             dispatch(createComment({ postId: post?.id, comment }));
 
             setComment('');
+            setImage('');
             commentInputRef.current?.blur();
         });
     }

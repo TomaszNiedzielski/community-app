@@ -26,7 +26,7 @@ const MicroblogScreen: React.FC<Props> = ({ route }) => {
 
     useEffect(() => {
         if (route.params?.action !== 'NO_LOADING') {
-            dispatch(resetPage());
+            dispatch(resetPage('microblog'));
             getPosts();
         }
     }, [token]);
@@ -48,12 +48,12 @@ const MicroblogScreen: React.FC<Props> = ({ route }) => {
     }, []);
 
     const onRefresh = () => {
-        dispatch(resetPage());
+        dispatch(resetPage('microblog'));
         getPosts();
     }
 
     const onEndReached = () => {
-        if (!posts.loading && !posts.reloading && !posts.isLastPage) {
+        if (!posts['microblog'].loading && !posts['microblog'].reloading && !posts['microblog'].isLastPage) {
             getPosts();
         }
     }
@@ -63,13 +63,13 @@ const MicroblogScreen: React.FC<Props> = ({ route }) => {
     return (
         <PrimaryContainer style={styles.container}>
             <FlatList
-                data={posts.data}
+                data={posts['microblog'].data}
                 renderItem={renderPostItem}
-                refreshing={posts.reloading}
+                refreshing={posts['microblog'].reloading}
                 onRefresh={onRefresh}
                 keyboardShouldPersistTaps="always"
                 onEndReached={onEndReached}
-                ListFooterComponent={() => posts.loading ? <ActivityIndicator color={Colors[theme].primary} /> : null}
+                ListFooterComponent={() => posts['microblog'].loading ? <ActivityIndicator color={Colors[theme].primary} /> : null}
                 ListFooterComponentStyle={styles.footer}
             />
             <NetInfoAlert />
