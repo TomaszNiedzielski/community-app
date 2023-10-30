@@ -1,15 +1,15 @@
 import React, { useMemo } from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
 import Colors, { Theme } from '../../../constants/Colors';
-import { PostProps } from '../../../redux/posts';
+import { PostProps, PostType } from '../../../redux/posts';
 import PostFooter from './PostFooter';
 import PostHeader from './PostHeader';
-import ScalableImage from '../../common/ScalableImage';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store';
+import PostImage from './PostImage';
 
 interface Props extends PostProps {
-    type: 'original' | 'comment';
+    type: PostType;
     onReply: (post: PostProps) => void;
     commentsShown?: boolean;
 }
@@ -73,11 +73,11 @@ const Post: React.FC<Props> = React.memo(post => {
                 likesCount={likesCount}
                 isLiked={isLiked}
                 createdAt={createdAt}
+                type={type}
             />
             {text ? <Text style={styles.text}>{text}</Text> : null}
-            {image && <ScalableImage
+            {image && <PostImage
                 uri={image}
-                style={styles.image}
             />}
             <PostFooter
                 postId={id}
@@ -85,6 +85,7 @@ const Post: React.FC<Props> = React.memo(post => {
                 onReply={() => onReply(post)}
                 viewsCount={viewsCount}
                 commentsCount={comments?.count}
+                type={type}
             />
             {type === 'original' && <View>
                 {comments?.items.length && commentsShown ? <>
@@ -101,13 +102,11 @@ const Post: React.FC<Props> = React.memo(post => {
 
 const styling = (theme: Theme) => StyleSheet.create({
     container: {
-        marginTop: 10,
         backgroundColor: Colors[theme].white,
         paddingHorizontal: 15,
         paddingVertical: 20,
-        borderRadius: 10,
-        borderWidth: 1,
-        borderColor: 'rgba(0, 0, 0, .1)'
+        borderTopWidth: 1,
+        borderColor: Colors[theme].lightGray
     },
     avatar: {
         height: 40,
@@ -126,13 +125,11 @@ const styling = (theme: Theme) => StyleSheet.create({
     },
     commentWraper: {
         borderTopWidth: 1,
-        borderTopColor: Colors[theme].accent,
+        borderTopColor: Colors[theme].lightGray,
         marginLeft: 20,
         paddingTop: 15
     },
     commentsBorder: {
-        borderTopWidth: 1,
-        borderColor: '#2c2c52',
         marginTop: 10
     }
 });

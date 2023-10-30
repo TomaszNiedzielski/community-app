@@ -66,7 +66,7 @@ const PostScreen: React.FC<Props> = ({ route }) => {
 
     if (post) {
         return (
-            <PrimaryContainer style={styles.container}>
+            <PrimaryContainer>
                 <FlatList
                     data={[post]}
                     renderItem={() => (
@@ -100,9 +100,6 @@ const PostScreen: React.FC<Props> = ({ route }) => {
 }
 
 const styling = (theme: Theme) => StyleSheet.create({
-    container: {
-        padding: 5
-    },
     scrollView: {
         paddingBottom: 80
     },

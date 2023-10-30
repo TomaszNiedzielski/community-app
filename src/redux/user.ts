@@ -65,9 +65,9 @@ export interface UserProps {
 }
 
 const initialState: UserProps = {
-    id: 0,
-    name: '',
-    email: '',
+    id: 1,
+    name: 'Admin',
+    email: 'tomasz9531@gmail.com',
     token: '110|60iQl8EvCqDzkY400AyWUX94aWHERx7V6tSQ6l3P',
     avatar: {
         url: '',

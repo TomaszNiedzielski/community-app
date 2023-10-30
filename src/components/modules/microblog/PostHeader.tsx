@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import Colors, { Theme } from '../../../constants/Colors';
-import { likeThePost, PostProps } from '../../../redux/posts';
+import { likeThePost, PostProps, PostType } from '../../../redux/posts';
 import { RootState } from '../../../redux/store';
 import api from '../../../utils/api';
 import LikeButton from './LikeButton';
@@ -13,9 +13,10 @@ dayjs.extend(relativeTime);
 
 interface Props extends Omit<PostProps, 'id' | 'text' | 'image' | 'comments'> {
     postId: PostProps['id'];
+    type: PostType;
 }
 
-const PostHeader: React.FC<Props> = ({ postId, user, createdAt, isLiked, likesCount }) => {
+const PostHeader: React.FC<Props> = ({ postId, user, createdAt, isLiked, likesCount, type }) => {
     const dispatch = useDispatch();
     const token = useSelector((state: RootState) => state.user.token);
     const theme = useSelector((state: RootState) => state.theme);
@@ -60,9 +61,9 @@ const PostHeader: React.FC<Props> = ({ postId, user, createdAt, isLiked, likesCo
                 {user.avatar
                 ? <Image
                     source={{ uri: user.avatar }}
-                    style={styles.avatar}
+                    style={[styles.avatar, (type === 'comment' ? styles.smallAvatar : {})]}
                 />
-                : <Text style={styles.avatar}>{user.name[0]}</Text>}
+                : <Text style={[styles.avatar, (type === 'comment' ? styles.smallAvatar : {})]}>{user.name[0]}</Text>}
                 <View style={{ marginLeft: 16 }}>
                     <View style={styles.nameWrapper}>
                         <Text style={styles.name}>{user.name}</Text>
@@ -99,6 +100,11 @@ const styling = (theme: Theme) => StyleSheet.create({
         color: Colors[theme].black,
         fontSize: 22,
         fontFamily: 'Inter-Bold'
+    },
+    smallAvatar: {
+        height: 36,
+        width: 36,
+        fontSize: 19
     },
     nameWrapper: {
         flexDirection: 'row',

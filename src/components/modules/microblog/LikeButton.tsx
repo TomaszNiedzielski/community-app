@@ -19,7 +19,7 @@ const LikeButton: React.FC<Props> = ({ onPress, isLiked, likesCount }) => {
         <View style={styles.container}>
             <Text style={styles.likes}>{likesCount}</Text>
             <TouchableOpacity onPress={onPress} hitSlop={styles.hitSlop}>
-                <Icon name={isLiked ? 'heart' : 'hearto'} size={22} color={Colors[theme].black} />
+                <Icon name={isLiked ? 'heart' : 'hearto'} size={22} color={Colors[theme].primary} />
             </TouchableOpacity>
         </View>
     );
@@ -32,7 +32,7 @@ const styling = (theme: Theme) => StyleSheet.create({
         alignItems: 'center',
     },
     likes: {
-        color: Colors[theme].black,
+        color: Colors[theme].primary,
         fontWeight: 'bold',
         marginRight: 12,
         fontSize: 13

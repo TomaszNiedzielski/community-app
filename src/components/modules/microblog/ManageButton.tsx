@@ -21,7 +21,7 @@ const ManageButton: React.FC<Props> = ({ postId }) => {
                 dispatch(openSheet({ value: true, name: 'PostManager', data: { postId } }));
             }}
         >
-            <Icon name="dots-three-vertical" size={16} color={Colors[theme].black} />
+            <Icon name="dots-three-vertical" size={14} color={Colors[theme].gray} />
         </TouchableOpacity>
     );
 }

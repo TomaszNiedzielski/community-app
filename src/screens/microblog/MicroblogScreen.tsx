@@ -79,7 +79,6 @@ const MicroblogScreen: React.FC<Props> = ({ route }) => {
 
 const styling = (theme: Theme) => StyleSheet.create({
     container: {
-        padding: 5,
         backgroundColor: '#ddd'
     },
     footer: {

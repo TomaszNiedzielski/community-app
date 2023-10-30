@@ -41,6 +41,8 @@ export const deletePost = createAsyncThunk(
     }
 );
 
+export type PostType = 'original' | 'comment';
+
 export interface PostProps {
     id: number | string;
     user: {

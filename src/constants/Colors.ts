@@ -1,8 +1,8 @@
 const commonColors = {
     primary: 'orange',
     accent: 'red',
-    // dark: '',
-    // gray: '',
+    lightGray: '#eee',
+    gray: 'gray'
 }
 
 const light = {
