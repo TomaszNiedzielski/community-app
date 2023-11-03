@@ -2,6 +2,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MicroblogNavigator from './MicroblogNavigator';
 import PostCreatorScreen from '../screens/microblog/PostCreatorScreen';
 import UserScreen from '../screens/user/UserScreen';
+import ChatNavigator from './ChatNavigator';
 
 const Tab = createBottomTabNavigator();
 
@@ -23,6 +24,14 @@ const MainNavigator: React.FC = () => {
                     headerShown: false,
                     tabBarStyle: { display: 'none' },
                     title: 'Create Post',
+                }}
+            />
+            <Tab.Screen
+                name="ChatNavigator"
+                component={ChatNavigator}
+                options={{
+                    headerShown: false,
+                    title: 'Chat',
                 }}
             />
             <Tab.Screen

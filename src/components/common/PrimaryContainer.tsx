@@ -1,7 +1,9 @@
-import React, { useCallback } from 'react';
-import { SafeAreaView, StatusBar, StyleSheet, ViewStyle } from 'react-native';
-import { useFocusEffect } from '@react-navigation/native';
-// import Colors from '../../constants/Colors';
+import React, { useMemo } from 'react';
+import { SafeAreaView, StyleSheet, ViewStyle } from 'react-native';
+import Colors, { Theme } from '../../constants/Colors';
+import { useSelector } from 'react-redux';
+// import { useFocusEffect } from '@react-navigation/native';
+import { RootState } from '../../redux/store';
 
 interface Props {
     children: React.ReactNode;
@@ -10,9 +12,12 @@ interface Props {
 }
 
 const PrimaryContainer: React.FC<Props> = ({ children, style, statusBarColor }) => {
-    useFocusEffect(useCallback(() => {
+    // useFocusEffect(useCallback(() => {
         // StatusBar.setBackgroundColor(statusBarColor || Colors.dark);
-    }, []));
+    // }, []));
+
+    const theme = useSelector((state: RootState) => state.theme);
+    const styles = useMemo(() => styling(theme), [theme]);
 
     return (
         <SafeAreaView style={[styles.container, style]}>
@@ -21,12 +26,10 @@ const PrimaryContainer: React.FC<Props> = ({ children, style, statusBarColor }) 
     );
 }
 
-export const SCREEN_PADDING = 20;
-
-const styles = StyleSheet.create({
+const styling = (theme: Theme) => StyleSheet.create({
     container: {
         flex: 1,
-        // backgroundColor: Colors.dark,
+        backgroundColor: Colors[theme].white,
     }
 });
 

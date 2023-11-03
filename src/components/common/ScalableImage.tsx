@@ -12,7 +12,7 @@ const ScalableImage: React.FC<Props> = ({ uri, style, onSizeCalculated }) => {
     const [width, setWidth] = useState(0);
 
     useEffect(() => {
-        const screenWidth = Dimensions.get('screen').width;
+        const screenWidth = Dimensions.get('window').width;
         const imageWidth = screenWidth - 15 * 2;
         setWidth(imageWidth);
         

@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { StyleSheet, View, Text, Image } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
 import Colors, { Theme } from '../../../constants/Colors';
@@ -9,6 +9,7 @@ import api from '../../../utils/api';
 import LikeButton from './LikeButton';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
+import Avatar from './Avatar';
 dayjs.extend(relativeTime);
 
 interface Props extends Omit<PostProps, 'id' | 'text' | 'image' | 'comments'> {
@@ -58,12 +59,11 @@ const PostHeader: React.FC<Props> = ({ postId, user, createdAt, isLiked, likesCo
     return (
         <View style={styles.container}>
             <View style={styles.user}>
-                {user.avatar
-                ? <Image
-                    source={{ uri: user.avatar }}
-                    style={[styles.avatar, (type === 'comment' ? styles.smallAvatar : {})]}
+                <Avatar
+                    url={user.avatar}
+                    name={user.name}
+                    small={type === 'comment'}
                 />
-                : <Text style={[styles.avatar, (type === 'comment' ? styles.smallAvatar : {})]}>{user.name[0]}</Text>}
                 <View style={{ marginLeft: 16 }}>
                     <View style={styles.nameWrapper}>
                         <Text style={styles.name}>{user.name}</Text>
