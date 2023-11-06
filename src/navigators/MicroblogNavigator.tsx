@@ -3,6 +3,7 @@ import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-na
 import { getFocusedRouteNameFromRoute, RouteProp } from '@react-navigation/native';
 import MicroblogScreen from '../screens/microblog/MicroblogScreen';
 import PostScreen from '../screens/microblog/PostScreen';
+import PostCreatorScreen from '../screens/microblog/PostCreatorScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -14,7 +15,7 @@ interface Props {
 const MicroblogNavigator: React.FC<Props> = ({ route, navigation }) => {
     useLayoutEffect(() => {
         const routeName = getFocusedRouteNameFromRoute(route);
-        if (routeName === 'Post') {
+        if (routeName === 'Post' || routeName === 'PostCreator') {
             navigation.setOptions({ tabBarStyle: { display: 'none' } } as any);
         } else {
             navigation.setOptions({ tabBarStyle: { display: 'flex' } } as any);
@@ -30,6 +31,13 @@ const MicroblogNavigator: React.FC<Props> = ({ route, navigation }) => {
             <Stack.Screen
                 name="Post"
                 component={PostScreen}
+            />
+            <Stack.Screen
+                name="PostCreator"
+                component={PostCreatorScreen}
+                options={{
+                    headerShown: false,
+                }}
             />
         </Stack.Navigator>
     );

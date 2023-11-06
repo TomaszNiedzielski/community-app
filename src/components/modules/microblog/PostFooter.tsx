@@ -85,8 +85,8 @@ const styling = (theme: Theme) => StyleSheet.create({
     itemWrapper: {
         flexDirection: 'row',
         alignItems: 'center',
-        paddingVertical: 10,
-        marginRight: 20,
+        paddingTop: 10,
+        marginRight: 40,
     }
 });
 

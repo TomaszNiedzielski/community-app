@@ -1,8 +1,10 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MicroblogNavigator from './MicroblogNavigator';
-import PostCreatorScreen from '../screens/microblog/PostCreatorScreen';
 import UserScreen from '../screens/user/UserScreen';
 import ChatNavigator from './ChatNavigator';
+import Icon from 'react-native-vector-icons/Entypo';
+import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 
 const Tab = createBottomTabNavigator();
 
@@ -14,16 +16,9 @@ const MainNavigator: React.FC = () => {
                 component={MicroblogNavigator}
                 options={{
                     headerShown: false,
-                    title: 'Microblog'
-                }}
-            />
-            <Tab.Screen
-                name="PostCreator"
-                component={PostCreatorScreen}
-                options={{
-                    headerShown: false,
-                    tabBarStyle: { display: 'none' },
-                    title: 'Create Post',
+                    title: 'Microblog',
+                    tabBarIcon: ({ focused }) => <Icon name="home" size={20} color={focused ? '#000' : 'gray'} />,
+                    tabBarActiveTintColor: '#000',
                 }}
             />
             <Tab.Screen
@@ -32,11 +27,17 @@ const MainNavigator: React.FC = () => {
                 options={{
                     headerShown: false,
                     title: 'Chat',
+                    tabBarIcon: ({ focused }) => <MaterialCommunityIconsIcon name="chat" size={20} color={focused ? '#000' : 'gray'} />,
+                    tabBarActiveTintColor: '#000',
                 }}
             />
             <Tab.Screen
                 name="User"
                 component={UserScreen}
+                options={{
+                    tabBarIcon: ({ focused }) => <FontAwesomeIcon name="user" size={20} color={focused ? '#000' : 'gray'} />,
+                    tabBarActiveTintColor: '#000',
+                }}
             />
         </Tab.Navigator>
     );

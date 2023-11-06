@@ -127,7 +127,8 @@ const styling = (theme: Theme) => StyleSheet.create({
         borderTopWidth: 1,
         borderTopColor: Colors[theme].lightGray,
         marginLeft: 20,
-        paddingTop: 15
+        paddingTop: 15,
+        paddingBottom: 10,
     },
     commentsBorder: {
         marginTop: 10
