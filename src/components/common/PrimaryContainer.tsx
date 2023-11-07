@@ -1,9 +1,5 @@
-import React, { useMemo } from 'react';
 import { SafeAreaView, StyleSheet, ViewStyle } from 'react-native';
-import Colors, { Theme } from '../../constants/Colors';
-import { useSelector } from 'react-redux';
-// import { useFocusEffect } from '@react-navigation/native';
-import { RootState } from '../../redux/store';
+import Colors from '../../constants/Colors';
 
 interface Props {
     children: React.ReactNode;
@@ -16,9 +12,6 @@ const PrimaryContainer: React.FC<Props> = ({ children, style, statusBarColor }) 
         // StatusBar.setBackgroundColor(statusBarColor || Colors.dark);
     // }, []));
 
-    const theme = useSelector((state: RootState) => state.theme);
-    const styles = useMemo(() => styling(theme), [theme]);
-
     return (
         <SafeAreaView style={[styles.container, style]}>
             {children}
@@ -26,10 +19,10 @@ const PrimaryContainer: React.FC<Props> = ({ children, style, statusBarColor }) 
     );
 }
 
-const styling = (theme: Theme) => StyleSheet.create({
+const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: Colors[theme].white,
+        backgroundColor: Colors.dark,
     }
 });
 

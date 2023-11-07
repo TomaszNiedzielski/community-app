@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { StyleSheet, TextInput, View, Alert, FlatList } from 'react-native';
 import { RouteProp } from '@react-navigation/native';
 import Post, { PostWrapper } from '../../components/modules/microblog/Post';
@@ -8,7 +8,7 @@ import api from '../../utils/api';
 import { PostProps, createComment, updatePost } from '../../redux/posts';
 import PrimaryContainer from '../../components/common/PrimaryContainer';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import Colors, { Theme } from '../../constants/Colors';
+import Colors from '../../constants/Colors';
 
 interface Props {
     route: RouteProp<any>;
@@ -17,13 +17,17 @@ interface Props {
 const PostScreen: React.FC<Props> = ({ route }) => {
     const [comment, setComment] = useState('');
     const [image, setImage] = useState(''); // base64
+    const [post, setPost] = useState<PostProps>();
 
-    const theme = useSelector((state: RootState) => state.theme);
     const { token } = useSelector((state: RootState) => state.user);
-    const post = useSelector((state: RootState) => state.posts.microblog.data.find(({ id }) => id === route.params?.postId));
+    const postMicroblog = useSelector((state: RootState) => state.posts.microblog.data.find(({ id }) => id === route.params?.postId));
+    const postProfile = useSelector((state: RootState) => state.posts.profile.data.find(({ id }) => id === route.params?.postId));
+
+    useEffect(() => {
+        setPost(postMicroblog ?? postProfile);
+    }, [postMicroblog, postProfile]);
 
     const dispatch = useDispatch();
-    const styles = useMemo(() => styling(theme), [theme]);
     const commentInputRef = useRef<TextInput>(null);
 
     const fetchPost = async () => {
@@ -34,7 +38,7 @@ const PostScreen: React.FC<Props> = ({ route }) => {
         }
     }
 
-    useEffect(() => { fetchPost() }, []);
+    useEffect(() => { fetchPost() }, [route.params?.postId]);
 
     const sendComment = () => {
         if (comment === '' && image === '') return;
@@ -70,7 +74,7 @@ const PostScreen: React.FC<Props> = ({ route }) => {
                 <FlatList
                     data={[post]}
                     renderItem={() => (
-                        <PostWrapper theme={theme}>
+                        <PostWrapper>
                             <Post
                                 {...post}
                                 type="original"
@@ -89,8 +93,12 @@ const PostScreen: React.FC<Props> = ({ route }) => {
                         onChangeText={txt => setComment(txt)}
                         value={comment}
                         ref={commentInputRef}
+                        placeholder="Write a comment..."
+                        placeholderTextColor={Colors.white}
+                        cursorColor={Colors.white}
+                        autoFocus={route.params?.action === 'ON_REPLY'}
                     />
-                    <Icon name="send" size={30} style={styles.sendIcon} onPress={sendComment} />
+                    {comment.length ? <Icon name="send" size={30} style={styles.sendIcon} onPress={sendComment} /> : null}
                 </View>
             </PrimaryContainer>
         );
@@ -99,7 +107,7 @@ const PostScreen: React.FC<Props> = ({ route }) => {
     return null;
 }
 
-const styling = (theme: Theme) => StyleSheet.create({
+const styles = StyleSheet.create({
     scrollView: {
         paddingBottom: 80
     },
@@ -111,21 +119,20 @@ const styling = (theme: Theme) => StyleSheet.create({
         right: 0,
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: Colors[theme].white,
+        backgroundColor: Colors.slightlyDark,
         paddingVertical: 10,
         paddingHorizontal: 15,
-        borderTopWidth: 1,
-        borderColor: '#ddd'
     },
     textInput: {
-        borderWidth: 1,
-        borderColor: '#ccc',
-        borderRadius: 10,
         flex: 1,
         paddingHorizontal: 10,
+        borderBottomWidth: 1,
+        borderColor: Colors.white,
+        color: Colors.white
     },
     sendIcon: {
         marginLeft: 15,
+        color: Colors.white
     }
 });
 

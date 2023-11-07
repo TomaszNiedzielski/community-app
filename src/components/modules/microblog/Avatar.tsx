@@ -1,8 +1,5 @@
-import { useMemo } from 'react';
 import { Image, StyleSheet, Text } from 'react-native';
-import Colors, { Theme } from '../../../constants/Colors';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../redux/store';
+import Colors from '../../../constants/Colors';
 
 interface Props {
     url?: string;
@@ -12,9 +9,6 @@ interface Props {
 }
 
 const Avatar: React.FC<Props> = ({ url, name, small, style }) => {
-    const theme = useSelector((state: RootState) => state.theme);
-    const styles = useMemo(() => styling(theme), [theme]);
-
     return (
         <>
         {url ? <Image
@@ -25,15 +19,15 @@ const Avatar: React.FC<Props> = ({ url, name, small, style }) => {
     );
 }
 
-const styling = (theme: Theme) => StyleSheet.create({
+const styles = StyleSheet.create({
     avatar: {
         height: 40,
         width: 40,
         borderRadius: 5,
         textAlign: 'center',
         textAlignVertical: 'center',
-        backgroundColor: Colors[theme].primary,
-        color: Colors[theme].black,
+        backgroundColor: Colors.primary,
+        color: Colors.black,
         fontSize: 22,
         fontFamily: 'Inter-Bold',
     },

@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import Avatar from '../microblog/Avatar';
+import Colors from '../../../constants/Colors';
 
 interface Props {
     name: string;
@@ -26,7 +27,7 @@ const styles = StyleSheet.create({
         width: Dimensions.get('screen').width - 70
     },
     name: {
-        color: '#000',
+        color: Colors.white,
         marginLeft: 12,
         fontSize: 18,
         fontWeight: 'bold',

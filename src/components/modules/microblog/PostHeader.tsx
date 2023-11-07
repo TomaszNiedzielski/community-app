@@ -1,8 +1,7 @@
-import React, { useMemo } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useDispatch, useSelector } from 'react-redux';
-import Colors, { Theme } from '../../../constants/Colors';
+import Colors from '../../../constants/Colors';
 import { likeThePost, PostProps, PostType } from '../../../redux/posts';
 import { RootState } from '../../../redux/store';
 import api from '../../../utils/api';
@@ -20,7 +19,6 @@ interface Props extends Omit<PostProps, 'id' | 'text' | 'image' | 'comments'> {
 const PostHeader: React.FC<Props> = ({ postId, user, createdAt, isLiked, likesCount, type }) => {
     const dispatch = useDispatch();
     const token = useSelector((state: RootState) => state.user.token);
-    const theme = useSelector((state: RootState) => state.theme);
     const navigation = useNavigation<any>();
 
     const handleLikeButtonPress = () => {
@@ -48,8 +46,6 @@ const PostHeader: React.FC<Props> = ({ postId, user, createdAt, isLiked, likesCo
     const navigateToPost = () => {
         navigation.navigate('Post', { postId });
     }
-
-    const styles = useMemo(() => styling(theme), [theme]);
 
     /**
      * FIX_REQUIRED
@@ -81,7 +77,7 @@ const PostHeader: React.FC<Props> = ({ postId, user, createdAt, isLiked, likesCo
     );
 }
 
-const styling = (theme: Theme) => StyleSheet.create({
+const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         width: '100%',
@@ -90,34 +86,17 @@ const styling = (theme: Theme) => StyleSheet.create({
     user: {
         flexDirection: 'row'
     },
-    avatar: {
-        height: 40,
-        width: 40,
-        borderRadius: 5,
-        textAlign: 'center',
-        textAlignVertical: 'center',
-        backgroundColor: Colors[theme].primary,
-        color: Colors[theme].black,
-        fontSize: 22,
-        fontFamily: 'Inter-Bold'
-    },
-    smallAvatar: {
-        height: 36,
-        width: 36,
-        fontSize: 19
-    },
     nameWrapper: {
         flexDirection: 'row',
         alignItems: 'center',
     },
     name: {
-        color: 'gold',
+        color: Colors.white,
         fontWeight: 'bold',
-
     },
     createdAt: {
         fontSize: 11,
-        // color: Colors.gray,
+        color: Colors.lightGray
     },
     badge: {
         color: 'red',

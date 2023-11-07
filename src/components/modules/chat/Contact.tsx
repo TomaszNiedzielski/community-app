@@ -4,6 +4,8 @@ import { TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store';
+import Colors from '../../../constants/Colors';
+import dayjs from 'dayjs';
 
 export interface Props {
     avatar: string;
@@ -19,6 +21,13 @@ export interface Props {
 const Contact: React.FC<Props> = ({ avatar, name, channelToken, lastMessage }) => {
     const navigation = useNavigation<any>();
     const userId = useSelector((state: RootState) => state.user.id);
+
+    const convertUTCDateToLocalDate = (createdAt: string) => {
+        const date = new Date(createdAt);
+        const localTimeZoneDate = new Date(date.getTime() - date.getTimezoneOffset() * 60 * 1000);
+        
+        return dayjs(localTimeZoneDate).fromNow();
+    }
     
     return (
         <TouchableOpacity onPress={() => navigation.navigate('Chat', { channelToken, avatar, name })}>
@@ -33,7 +42,12 @@ const Contact: React.FC<Props> = ({ avatar, name, channelToken, lastMessage }) =
                 />
                 <View style={styles.rightSide}>
                     <Text style={styles.name}>{name}</Text>
-                    <Text style={styles.lastMessage}>{lastMessage?.userId === userId ? 'You: ' : ''} {lastMessage?.text}</Text>
+                    {lastMessage &&
+                    <Text style={styles.lastMessage} numberOfLines={1}>
+                        <Text>{lastMessage.userId === userId ? 'You: ' : ''} </Text>
+                        <Text style={{ width: 100 }}>{lastMessage.text.slice(0, 10)}{lastMessage.text.length > 10 ? '...' : ''} • </Text>
+                        <Text>{convertUTCDateToLocalDate(lastMessage.createdAt)}</Text>
+                    </Text>}
                 </View>
             </View>
         </TouchableOpacity>
@@ -42,20 +56,21 @@ const Contact: React.FC<Props> = ({ avatar, name, channelToken, lastMessage }) =
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#fff',
         flexDirection: 'row',
-        marginVertical: 10,
+        marginVertical: 6,
+        padding: 10
     },
     rightSide: {
         marginLeft: 10,
         justifyContent: 'center',
     },
     name: {
-        color: '#000',
+        color: Colors.white,
         fontSize: 17
     },
     lastMessage: {
-        color: '#000',
+        color: Colors.lightGray,
+        fontSize: 13,
     }
 });
 

@@ -6,7 +6,7 @@ import { ThunkDispatch } from '@reduxjs/toolkit';
 import { useDispatch, useSelector } from 'react-redux';
 import PrimaryContainer from '../../components/common/PrimaryContainer';
 import Post, { PostWrapper } from '../../components/modules/microblog/Post';
-import Colors, { Theme } from '../../constants/Colors';
+import Colors from '../../constants/Colors';
 import { fetchPosts, resetPage } from '../../redux/posts';
 import { RootState } from '../../redux/store';
 import NetInfoAlert from '../../components/common/NetInfoAlert';
@@ -19,7 +19,6 @@ interface Props {
 
 const MicroblogScreen: React.FC<Props> = ({ route, navigation }) => {
     const posts = useSelector((state: RootState) => state.posts);
-    const theme = useSelector((state: RootState) => state.theme);
     const token = useSelector((state: RootState) => state.user.token);
 
     const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
@@ -27,7 +26,7 @@ const MicroblogScreen: React.FC<Props> = ({ route, navigation }) => {
     useEffect(() => {
         navigation.setOptions({
             headerRight: () => (
-                <Icon name="plus" size={30} color={Colors[theme].black} onPress={() => navigation.navigate('PostCreator')} />
+                <Icon name="plus" size={30} color={Colors.white} onPress={() => navigation.navigate('PostCreator')} />
             )
         });
     }, []);
@@ -45,11 +44,13 @@ const MicroblogScreen: React.FC<Props> = ({ route, navigation }) => {
 
     const renderPostItem = useMemo(() => {
         return ({ item }: any) => (
-            <PostWrapper key={item.id} theme={theme}>
+            <PostWrapper key={item.id}>
                 <Post
                     {...item}
                     type="original"
-                    onReply={() => navigation.navigate('Post', { postId: item.id })}
+                    onReply={() => navigation.navigate('Post', { postId: item.id, action: 'ON_REPLY' })}
+                    onOpen={() => navigation.navigate('Post', { postId: item.id })}
+                    isImageCollapsed
                 />
             </PostWrapper>
         );
@@ -66,10 +67,8 @@ const MicroblogScreen: React.FC<Props> = ({ route, navigation }) => {
         }
     }
 
-    const styles = useMemo(() => styling(theme), [theme]);
-
     return (
-        <PrimaryContainer style={styles.container}>
+        <PrimaryContainer>
             <FlatList
                 data={posts['microblog'].data}
                 renderItem={renderPostItem}
@@ -77,7 +76,7 @@ const MicroblogScreen: React.FC<Props> = ({ route, navigation }) => {
                 onRefresh={onRefresh}
                 keyboardShouldPersistTaps="always"
                 onEndReached={onEndReached}
-                ListFooterComponent={() => posts['microblog'].loading ? <ActivityIndicator color={Colors[theme].primary} /> : null}
+                ListFooterComponent={() => posts['microblog'].loading ? <ActivityIndicator color={Colors.primary} /> : null}
                 ListFooterComponentStyle={styles.footer}
             />
             <NetInfoAlert />
@@ -85,10 +84,7 @@ const MicroblogScreen: React.FC<Props> = ({ route, navigation }) => {
     );
 }
 
-const styling = (theme: Theme) => StyleSheet.create({
-    container: {
-        backgroundColor: '#ddd'
-    },
+const styles = StyleSheet.create({
     footer: {
         height: 30,
         padding: 10

@@ -1,5 +1,5 @@
 import { StyleSheet, View, Text, Image, Pressable } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Colors from '../../../constants/Colors';
 import { RootState } from '../../../redux/store';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -8,7 +8,6 @@ import { useNavigation } from '@react-navigation/native';
 const Header: React.FC = () => {
     const { name, token, avatar } = useSelector((state: RootState) => state.user);
     const navigation = useNavigation<any>();
-    const dispatch = useDispatch();
 
     return (
         <View style={styles.container}>

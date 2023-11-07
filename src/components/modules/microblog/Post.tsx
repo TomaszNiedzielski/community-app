@@ -1,38 +1,33 @@
 import React, { useMemo } from 'react';
 import { View, Text, StyleSheet, FlatList } from 'react-native';
-import Colors, { Theme } from '../../../constants/Colors';
+import Colors from '../../../constants/Colors';
 import { PostProps, PostType } from '../../../redux/posts';
 import PostFooter from './PostFooter';
 import PostHeader from './PostHeader';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../redux/store';
 import PostImage from './PostImage';
 
 interface Props extends PostProps {
     type: PostType;
     onReply: (post: PostProps) => void;
+    onOpen?: (post: PostProps) => void;
     commentsShown?: boolean;
+    isImageCollapsed?: boolean;
 }
 
-export const PostWrapper: React.FC<{ children: React.ReactNode; theme: Theme; }> = ({ children, theme }) => {
-    const styles = useMemo(() => styling(theme), [theme]);
-
+export const PostWrapper: React.FC<{ children: React.ReactNode; }> = ({ children }) => {
     return (
         <View style={styles.container}>{children}</View>
     );
 }
 
-const CommentWrapper: React.FC<{ children: React.ReactNode; theme: Theme; }> = ({ children, theme }) => {
-    const styles = useMemo(() => styling(theme), [theme]);
-
+const CommentWrapper: React.FC<{ children: React.ReactNode; }> = ({ children }) => {
     return (
         <View style={styles.commentWraper}>{children}</View>
     );
 }
 
 const Post: React.FC<Props> = React.memo(post => {
-    const { id, user, text, image, likesCount, viewsCount, comments, isLiked, createdAt, type = 'original', onReply, commentsShown } = post;
-    const theme = useSelector((state: RootState) => state.theme);
+    const { id, user, text, image, likesCount, viewsCount, comments, isLiked, createdAt, type = 'original', onReply, onOpen, commentsShown, isImageCollapsed } = post;
 
     /**
      * FIX_REQUIRED
@@ -41,24 +36,15 @@ const Post: React.FC<Props> = React.memo(post => {
      */
     const renderComment = useMemo(() => {
         return ({ item }: any) => (
-            <CommentWrapper key={item.id} theme={theme}>
+            <CommentWrapper key={item.id}>
                 <Post
                     {...item}
                     type="comment"
-                    onReply={() => onReply({
-                        ...post,
-                        text: item.text,
-                        user: {
-                            ...post.user,
-                            name: item.user.name
-                        }
-                    })}
+                    onReply={onReply}
                 />
             </CommentWrapper>
         );
     }, []);
-
-    const styles = useMemo(() => styling(theme), [theme]);
 
     /**
     * FIX_REQUIRED
@@ -78,11 +64,13 @@ const Post: React.FC<Props> = React.memo(post => {
             {text ? <Text style={styles.text}>{text}</Text> : null}
             {image && <PostImage
                 uri={image}
+                collapsed={isImageCollapsed}
             />}
             <PostFooter
                 postId={id}
                 postAuthorId={user.id}
                 onReply={() => onReply(post)}
+                onOpen={() => onOpen && onOpen(post)}
                 viewsCount={viewsCount}
                 commentsCount={comments?.count}
                 type={type}
@@ -100,13 +88,12 @@ const Post: React.FC<Props> = React.memo(post => {
     );
 });
 
-const styling = (theme: Theme) => StyleSheet.create({
+const styles = StyleSheet.create({
     container: {
-        backgroundColor: Colors[theme].white,
         paddingHorizontal: 15,
         paddingVertical: 20,
         borderTopWidth: 1,
-        borderColor: Colors[theme].lightGray
+        borderColor: Colors.slightlyDark
     },
     avatar: {
         height: 40,
@@ -114,7 +101,7 @@ const styling = (theme: Theme) => StyleSheet.create({
         borderRadius: 20,
     },
     text: {
-        color: Colors[theme].black,
+        color: Colors.white,
         marginTop: 10,
         lineHeight: 19,
     },
@@ -124,8 +111,8 @@ const styling = (theme: Theme) => StyleSheet.create({
         borderRadius: 4,
     },
     commentWraper: {
-        borderTopWidth: 1,
-        borderTopColor: Colors[theme].lightGray,
+        borderTopWidth: .2,
+        borderTopColor: Colors.gray,
         marginLeft: 20,
         paddingTop: 15,
         paddingBottom: 10,

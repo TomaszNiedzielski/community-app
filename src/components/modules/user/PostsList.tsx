@@ -1,7 +1,5 @@
 import { useMemo } from 'react';
 import { FlatList, FlatListProps, StyleSheet, ActivityIndicator } from 'react-native';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../redux/store';
 import { PostProps, PostsStore } from '../../../redux/posts';
 import Post, { PostWrapper } from '../microblog/Post';
 import { useNavigation } from '@react-navigation/native';
@@ -13,15 +11,15 @@ interface Props extends Omit<FlatListProps<PostProps>, 'data' | 'renderItem'> {
 
 const PostsList: React.FC<Props> = (props) => {
     const navigation = useNavigation<any>();
-    const theme = useSelector((state: RootState) => state.theme);
 
     const renderPostItem = useMemo(() => {
         return ({ item }: any) => (
-            <PostWrapper key={item.id} theme={theme}>
+            <PostWrapper key={item.id}>
                 <Post
                     {...item}
                     type="original"
-                    onReply={() => navigation.navigate('Post', { postId: item.id })}
+                    onReply={() => navigation.navigate('Post', { postId: item.id, action: 'ON_REPLY' })}
+                    onOpen={() => navigation.navigate('Post', { postId: item.id })}
                 />
             </PostWrapper>
         );
@@ -35,7 +33,7 @@ const PostsList: React.FC<Props> = (props) => {
             onRefresh={props.onRefresh}
             keyboardShouldPersistTaps="always"
             onEndReached={props.onEndReached}
-            ListFooterComponent={() => props.posts.loading ? <ActivityIndicator color={Colors[theme].primary} /> : null}
+            ListFooterComponent={() => props.posts.loading ? <ActivityIndicator color={Colors.primary} /> : null}
             ListFooterComponentStyle={styles.footer}
             {...props}
         />

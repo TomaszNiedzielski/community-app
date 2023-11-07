@@ -1,11 +1,8 @@
 import { useLayoutEffect } from 'react';
 import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { getFocusedRouteNameFromRoute, RouteProp } from '@react-navigation/native';
-import RecentMessagesScreen from '../screens/chat/RecentMessagesScreen';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import SearchContactsScreen from '../screens/chat/SearchContactsScreen';
-import ChatScreen from '../screens/chat/ChatScreen';
 import Colors from '../constants/Colors';
+import UserScreen from '../screens/user/UserScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -14,7 +11,7 @@ interface Props {
     route: RouteProp<any>;
 }
 
-const ChatNavigator: React.FC<Props> = ({ route, navigation }) => {
+const UserNavigator: React.FC<Props> = ({ route, navigation }) => {
     useLayoutEffect(() => {
         const routeName = getFocusedRouteNameFromRoute(route);
         if (routeName === 'SearchContacts' || routeName === 'Chat') {
@@ -34,25 +31,11 @@ const ChatNavigator: React.FC<Props> = ({ route, navigation }) => {
             }}
         >
             <Stack.Screen
-                name="RecentMessages"
-                component={RecentMessagesScreen}
-                options={{
-                    headerRight: () => (
-                        <Icon name="search" size={20} color={Colors.white} onPress={() => navigation.navigate('SearchContacts')} />
-                    ),
-                    title: 'Recent Messages',
-                }}
-            />
-            <Stack.Screen
-                name="SearchContacts"
-                component={SearchContactsScreen}
-            />
-            <Stack.Screen
-                name="Chat"
-                component={ChatScreen}
+                name="User"
+                component={UserScreen}
             />
         </Stack.Navigator>
     );
 }
 
-export default ChatNavigator;
+export default UserNavigator;

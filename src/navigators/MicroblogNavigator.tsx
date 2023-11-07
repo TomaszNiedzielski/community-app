@@ -4,6 +4,7 @@ import { getFocusedRouteNameFromRoute, RouteProp } from '@react-navigation/nativ
 import MicroblogScreen from '../screens/microblog/MicroblogScreen';
 import PostScreen from '../screens/microblog/PostScreen';
 import PostCreatorScreen from '../screens/microblog/PostCreatorScreen';
+import Colors from '../constants/Colors';
 
 const Stack = createNativeStackNavigator();
 
@@ -23,7 +24,14 @@ const MicroblogNavigator: React.FC<Props> = ({ route, navigation }) => {
     }, [navigation, route]);
 
     return (
-        <Stack.Navigator>
+        <Stack.Navigator
+            screenOptions={{
+                headerStyle: {
+                    backgroundColor: Colors.slightlyDark,
+                },
+                headerTintColor: Colors.white
+            }}
+        >
             <Stack.Screen
                 name="Microblog"
                 component={MicroblogScreen}

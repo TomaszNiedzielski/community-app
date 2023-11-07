@@ -1,24 +1,30 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MicroblogNavigator from './MicroblogNavigator';
-import UserScreen from '../screens/user/UserScreen';
 import ChatNavigator from './ChatNavigator';
 import Icon from 'react-native-vector-icons/Entypo';
 import MaterialCommunityIconsIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import Colors from '../constants/Colors';
+import UserNavigator from './UserNavigator';
 
 const Tab = createBottomTabNavigator();
 
 const MainNavigator: React.FC = () => {
     return (
-        <Tab.Navigator>
+        <Tab.Navigator
+            screenOptions={{
+                tabBarInactiveBackgroundColor: Colors.slightlyDark,
+                tabBarActiveBackgroundColor: Colors.slightlyDark,
+                tabBarShowLabel: false,
+            }}
+        >
             <Tab.Screen
                 name="MicroblogNavigator"
                 component={MicroblogNavigator}
                 options={{
                     headerShown: false,
                     title: 'Microblog',
-                    tabBarIcon: ({ focused }) => <Icon name="home" size={20} color={focused ? '#000' : 'gray'} />,
-                    tabBarActiveTintColor: '#000',
+                    tabBarIcon: ({ focused }) => <Icon name="home" size={20} color={focused ? Colors.primary : Colors.lightGray} />,
                 }}
             />
             <Tab.Screen
@@ -27,16 +33,15 @@ const MainNavigator: React.FC = () => {
                 options={{
                     headerShown: false,
                     title: 'Chat',
-                    tabBarIcon: ({ focused }) => <MaterialCommunityIconsIcon name="chat" size={20} color={focused ? '#000' : 'gray'} />,
-                    tabBarActiveTintColor: '#000',
+                    tabBarIcon: ({ focused }) => <MaterialCommunityIconsIcon name="chat" size={20} color={focused ? Colors.primary : Colors.lightGray} />,
                 }}
             />
             <Tab.Screen
-                name="User"
-                component={UserScreen}
+                name="UserNavigator"
+                component={UserNavigator}
                 options={{
-                    tabBarIcon: ({ focused }) => <FontAwesomeIcon name="user" size={20} color={focused ? '#000' : 'gray'} />,
-                    tabBarActiveTintColor: '#000',
+                    headerShown: false,
+                    tabBarIcon: ({ focused }) => <FontAwesomeIcon name="user" size={20} color={focused ? Colors.primary : Colors.lightGray} />,
                 }}
             />
         </Tab.Navigator>

@@ -221,6 +221,7 @@ const postsSlice = createSlice({
                 handleTask('microblog');
                 handleTask('profile');
             })
+
             .addCase(fetchUserPosts.fulfilled, (state, action) => {
                 state['profile'].reloading = false;
                 state['profile'].loading = false;
@@ -232,6 +233,17 @@ const postsSlice = createSlice({
                     state['profile'].data = removePostDuplicates(newPosts);
                     state['profile'].page++;
                 }
+            })
+            .addCase(fetchUserPosts.pending, (state) => {
+                if (state['profile'].page === 1) {
+                    state['profile'].reloading = true;
+                } else {
+                    state['profile'].loading = true;
+                }
+            })
+            .addCase(fetchUserPosts.rejected, (state) => {
+                state['profile'].reloading = false;
+                state['profile'].loading = false;
             })
     }
 });

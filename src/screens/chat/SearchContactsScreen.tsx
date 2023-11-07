@@ -8,6 +8,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import ContactSearchResult from '../../components/modules/chat/ContactSearchResult';
 import { Props as ContactSearchResultProps } from '../../components/modules/chat/ContactSearchResult';
+import Colors from '../../constants/Colors';
 
 const SearchInput: React.FC<TextInputProps> = (props) => {
     const inputRef = useRef<TextInput>(null);
@@ -29,6 +30,7 @@ const SearchInput: React.FC<TextInputProps> = (props) => {
         <TextInput
             style={styles.input}
             placeholder="Search for contacts..."
+            placeholderTextColor={Colors.white}
             ref={inputRef}
             {...props}
         />
@@ -46,17 +48,21 @@ const SearchContactsScreen: React.FC<Props> = ({ navigation }) => {
 
     const { token } = useSelector((state: RootState) => state.user);
 
-    navigation.setOptions({
-        headerRight: () => <SearchInput
-            onChangeText={setSearch}
-        />
-    });
+    useEffect(() => {
+        navigation.setOptions({
+            headerRight: () => <SearchInput
+                onChangeText={setSearch}
+            />
+        });
+    }, []);
 
     useEffect(() => {
-        api.get('/contacts/search/' + search, token)
-        .then((res: ApiResponse) => {
-            setSearchResults(res.data);
-        });
+        if (search) {
+            api.get('/contacts/search/' + search, token)
+            .then((res: ApiResponse) => {
+                setSearchResults(res.data);
+            });
+        }
     }, [search]);
 
     return (
@@ -74,7 +80,8 @@ const styles = StyleSheet.create({
         padding: 10,
     },
     input: {
-        width: Dimensions.get('screen').width - 70
+        width: Dimensions.get('screen').width - 70,
+        color: Colors.white,
     }
 });
 

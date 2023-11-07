@@ -7,6 +7,7 @@ import PostsList from '../../components/modules/user/PostsList';
 import { useEffect } from 'react';
 import { fetchUserPosts, resetPage } from '../../redux/posts';
 import { ThunkDispatch } from '@reduxjs/toolkit';
+import Colors from '../../constants/Colors';
 
 const UserScreen: React.FC = () => {
     const { name, token, id } = useSelector((state: RootState) => state.user);
@@ -57,10 +58,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginVertical: 30,
+        marginBottom: 50,
     },
     userName: {
         fontSize: 24,
-        color: '#000',
+        color: Colors.white,
         fontWeight: 'bold',
         marginTop: 15,
     }

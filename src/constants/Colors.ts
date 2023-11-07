@@ -1,22 +1,11 @@
-const commonColors = {
-    primary: 'orange',
-    accent: 'red',
+export default {
+    primary: '#0a86f6',
+    accent: '#0cc7fc',
     lightGray: '#eee',
-    gray: 'gray'
-}
-
-const light = {
-    ...commonColors,
+    gray: '#5c819b',
+    dark: '#0c2132',
+    slightlyDark: '#173044',
+    black: '#000',
     white: '#fff',
-    black: '#000'
+    red: '#f90952',
 }
-
-const dark = {
-    ...commonColors,
-    white: '#000',
-    black: '#fff'
-}
-
-export type Theme = 'light' | 'dark';
-
-export default { light, dark }

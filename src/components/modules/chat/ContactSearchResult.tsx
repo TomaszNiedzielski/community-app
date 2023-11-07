@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import api, { ApiResponse } from '../../../utils/api';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store';
+import Colors from '../../../constants/Colors';
 
 export interface Props {
     name: string;
@@ -57,7 +58,7 @@ const styles = StyleSheet.create({
     name: {
         marginLeft: 10,
         fontSize: 16,
-        color: '#000',
+        color: Colors.white,
     }
 });
 

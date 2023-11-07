@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, useMemo } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import {
     Bubble,
@@ -12,7 +12,7 @@ import {
     Send,
     SendProps,
 } from 'react-native-gifted-chat';
-import Colors, { Theme } from '../../../constants/Colors';
+import Colors from '../../../constants/Colors';
 import NetInfoAlert from '../../common/NetInfoAlert';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store';
@@ -27,8 +27,6 @@ interface Props {
 const Chat: React.FC<Props> = ({ channelToken }) => {
     const [messages, setMessages] = useState<IMessage[]>([]);
     const { id: userId, token } = useSelector((state: RootState) => state.user);
-    const theme = useSelector((state: RootState) => state.theme);
-    const styles = useMemo(() => styling(theme), [theme]);
 
     useEffect(() => {
         const fetchMessages = async () => {
@@ -116,6 +114,7 @@ const Chat: React.FC<Props> = ({ channelToken }) => {
                 <Icon
                     name="send"
                     size={26}
+                    color={Colors.primary}
                     style={{
                         height: 26,
                         width: 26,
@@ -135,7 +134,7 @@ const Chat: React.FC<Props> = ({ channelToken }) => {
                 wrapperStyle={{
                     left: {},
                     right: {
-                        backgroundColor: Colors[theme].primary
+                        backgroundColor: Colors.primary
                     }
                 }}
             />
@@ -150,7 +149,6 @@ const Chat: React.FC<Props> = ({ channelToken }) => {
                     fontSize: 16,
                     marginBottom: 10
                 }}>Send first message!</Text>
-                <Text style={{ color: '#ddd', textAlign: 'center' }}>Tell me something about you, and what's your biggest problem. Remember. I'm not a bot. <Text style={{ fontWeight: 'bold', color: 'red' }}>I'm a human with limited time</Text>, but I will try to reply as soon as possible.</Text>
             </View>
         );
     }
@@ -179,7 +177,7 @@ const Chat: React.FC<Props> = ({ channelToken }) => {
     );
 }
 
-const styling = (theme: Theme) => StyleSheet.create({
+const styles = StyleSheet.create({
     chatEmptyContainer: {
         flex: 1,
         justifyContent: 'center',

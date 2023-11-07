@@ -10,6 +10,9 @@ import { ThunkDispatch } from '@reduxjs/toolkit';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import BottomSheetContainer from './src/components/modules/sheets/BottomSheetContainer';
+import Colors from './src/constants/Colors';
+import changeNavigationBarColor from 'react-native-navigation-bar-color';
+import { StatusBar } from 'react-native';
 
 const Stack = createNativeStackNavigator();
 
@@ -33,6 +36,11 @@ const AppContent: React.FC = () => {
     }
 
     useEffect(() => { authenticateUser() }, []);
+
+    useEffect(() => {
+        changeNavigationBarColor(Colors.slightlyDark);
+        StatusBar.setBackgroundColor(Colors.slightlyDark);
+    }, []);
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>

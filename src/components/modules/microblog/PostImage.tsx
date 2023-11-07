@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { View, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import ScalableImage from '../../common/ScalableImage';
 
@@ -21,16 +21,23 @@ const renderShadow = () => {
 
 interface Props {
     uri: string;
+    collapsed?: boolean;
 }
 
-const PostImage: React.FC<Props> = ({ uri }) => {
-    const [isCollapsed, setIsCollapsed] = useState(true);
+const PostImage: React.FC<Props> = ({ uri, collapsed }) => {
+    const [isCollapsed, setIsCollapsed] = useState(false);
+
+    useEffect(() => {
+        if (collapsed !== undefined) {
+            setIsCollapsed(collapsed);
+        }
+    }, [collapsed]);
 
     return (
         <View style={[styles.container, isCollapsed ? styles.collapsed : {}]}>
             <ScalableImage
                 uri={uri}
-                onSizeCalculated={({ height }) => setIsCollapsed(height > 350)}
+                onSizeCalculated={({ height }) => (collapsed === true) && setIsCollapsed(height > 350)}
             />
             {isCollapsed && <TouchableWithoutFeedback
                 onPress={() => setIsCollapsed(false)}

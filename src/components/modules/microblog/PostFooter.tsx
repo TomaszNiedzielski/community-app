@@ -1,7 +1,6 @@
-import React, { useMemo } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useSelector } from 'react-redux';
-import Colors, { Theme } from '../../../constants/Colors';
+import Colors from '../../../constants/Colors';
 import { PostProps, PostType } from '../../../redux/posts';
 import { RootState } from '../../../redux/store';
 import ManageButton from './ManageButton';
@@ -10,6 +9,7 @@ import IconEntypo from 'react-native-vector-icons/Entypo';
 
 interface Props {
     onReply: () => void;
+    onOpen: () => void;
     postId: PostProps['id'];
     postAuthorId: PostProps['user']['id'];
     viewsCount: PostProps['viewsCount'];
@@ -17,11 +17,8 @@ interface Props {
     type: PostType;
 }
 
-const PostFooter: React.FC<Props> = ({ onReply, postId, postAuthorId, viewsCount, commentsCount, type }) => {
+const PostFooter: React.FC<Props> = ({ onReply, onOpen, postId, postAuthorId, viewsCount, commentsCount, type }) => {
     const user = useSelector((state: RootState) => state.user);
-    const theme = useSelector((state: RootState) => state.theme);
-
-    const styles = useMemo(() => styling(theme), [theme]);
 
     return (
         <View style={styles.container}>
@@ -29,9 +26,9 @@ const PostFooter: React.FC<Props> = ({ onReply, postId, postAuthorId, viewsCount
                 {type === 'original' && <TouchableOpacity
                     style={styles.itemWrapper}
                     hitSlop={styles.hitSlop}
-                    onPress={onReply}
+                    onPress={onOpen}
                 >
-                    <IconFontAwesome name="comments" size={16} color={Colors[theme].gray} />
+                    <IconFontAwesome name="comments" size={16} color={Colors.gray} />
                     <Text style={styles.title}>{commentsCount}</Text>
                 </TouchableOpacity>}
 
@@ -40,12 +37,12 @@ const PostFooter: React.FC<Props> = ({ onReply, postId, postAuthorId, viewsCount
                     hitSlop={styles.hitSlop}
                     onPress={onReply}
                 >
-                    <IconEntypo name="reply" size={16} color={Colors[theme].gray} />
+                    <IconEntypo name="reply" size={16} color={Colors.gray} />
                     <Text style={styles.title}>Reply</Text>
                 </TouchableOpacity>
 
                 {viewsCount !== undefined && <View style={styles.itemWrapper}>
-                    <IconFontAwesome name="eye" size={16} color={Colors[theme].black} />
+                    <IconFontAwesome name="eye" size={16} color={Colors.black} />
                     <Text style={styles.title}>{viewsCount}</Text>
                 </View>}
             </View>
@@ -56,7 +53,7 @@ const PostFooter: React.FC<Props> = ({ onReply, postId, postAuthorId, viewsCount
     );
 }
 
-const styling = (theme: Theme) => StyleSheet.create({
+const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         marginTop: 5,
@@ -71,7 +68,7 @@ const styling = (theme: Theme) => StyleSheet.create({
         width: 15,
     },
     title: {
-        color: Colors[theme].gray,
+        color: Colors.gray,
         fontSize: 10,
         marginLeft: 8,
         fontWeight: '500',

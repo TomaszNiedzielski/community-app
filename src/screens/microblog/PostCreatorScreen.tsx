@@ -1,8 +1,8 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { View, TextInput, StyleSheet, Text, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Alert } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import Colors, { Theme } from '../../constants/Colors';
+import Colors from '../../constants/Colors';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import PrimaryContainer from '../../components/common/PrimaryContainer';
@@ -10,6 +10,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import api from '../../utils/api';
 import { createPost } from '../../redux/posts';
 import ImagePicker from 'react-native-image-crop-picker';
+import FullScreenLoader from '../../components/common/FullScreenLoader';
 
 interface Props {
     navigation: NativeStackNavigationProp<any>;
@@ -19,15 +20,15 @@ const PostCreatorScreen: React.FC<Props> = ({ navigation }) => {
     const [text, setText] = useState('');
     const [imageFile, setImageFile] = useState(''); // base64
     const [imageName, setImageName] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
-    const theme = useSelector((state: RootState) => state.theme);
     const { token } = useSelector((state: RootState) => state.user);
-
     const dispatch = useDispatch();
-    const styles = useMemo(() => styling(theme), [theme]);
 
     const publishPost = () => {
         if (text === '' && imageFile === '') return;
+
+        setIsLoading(true);
 
         api.post('/posts', {
             text,
@@ -47,7 +48,8 @@ const PostCreatorScreen: React.FC<Props> = ({ navigation }) => {
             setImageName('');
 
             navigation.navigate('Microblog');
-        });
+        })
+        .finally(() => setIsLoading(false));
     }
 
     const openPicker = () => {
@@ -77,13 +79,19 @@ const PostCreatorScreen: React.FC<Props> = ({ navigation }) => {
         });
     }
 
+    const rejectImage = () => {
+        setImageFile('');
+        setImageName('');
+    }
+
     return (
-        <PrimaryContainer>
+        <PrimaryContainer style={styles.container}>
+            <FullScreenLoader visible={isLoading} />
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <View style={{ flex: 1 }}>
                     <View style={styles.header}>
                         <Text style={styles.title}>Create post</Text>
-                        <Icon name="close" size={36} color={Colors[theme].black} onPress={() => navigation.goBack()} style={styles.close} />
+                        <Icon name="close" size={36} color={Colors.white} onPress={() => navigation.goBack()} />
                     </View>
                     <View style={{ flex: 1 }}>
                         <KeyboardAwareScrollView extraHeight={50}>
@@ -93,14 +101,19 @@ const PostCreatorScreen: React.FC<Props> = ({ navigation }) => {
                                 multiline
                                 onChangeText={txt => setText(txt)}
                                 value={text}
+                                placeholderTextColor={Colors.white}
+                                cursorColor={Colors.white}
                             />
                         </KeyboardAwareScrollView>
+                        {imageName ? <View style={styles.imageItem}>
+                            <Text style={styles.imageName}>{imageName}</Text>
+                            <Icon name="remove" color={Colors.red} size={26} onPress={rejectImage} />
+                        </View> : null}
                         <View style={styles.footer}>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                 <TouchableOpacity onPress={openPicker}>
-                                    <Icon name="image" size={26} />
+                                    <Icon name="image" size={26} color={Colors.white} />
                                 </TouchableOpacity>
-                                <Text style={{ marginLeft: 10 }}>{imageName}</Text>
                             </View>
                             
                             <TouchableOpacity onPress={publishPost}>
@@ -114,25 +127,26 @@ const PostCreatorScreen: React.FC<Props> = ({ navigation }) => {
     );
 }
 
-const styling = (theme: Theme) => StyleSheet.create({
+const styles = StyleSheet.create({
+    container: {
+        backgroundColor: Colors.slightlyDark
+    },
     header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingHorizontal: 16,
-        paddingVertical: 10
+        paddingVertical: 20
     },
     title: {
         fontSize: 30,
-        color: Colors[theme].black,
+        color: Colors.white,
         fontWeight: 'bold'
     },
-    close: {
-        padding: 10
-    },
     textInput: {
-        fontSize: 26,
+        fontSize: 24,
         padding: 16,
+        color: Colors.white
     },
     footer: {
         height: 50,
@@ -144,7 +158,17 @@ const styling = (theme: Theme) => StyleSheet.create({
         borderColor: '#ccc',
     },
     publish: {
-        color: Colors[theme].black
+        color: Colors.white,
+        fontWeight: 'bold',
+    },
+    imageItem: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        padding: 20,
+        alignItems: 'center'
+    },
+    imageName: {
+        color: Colors.white
     }
 });
 

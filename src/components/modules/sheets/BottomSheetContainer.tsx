@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../redux/store';
 import { closeSheet } from '../../../redux/sheet';
 import PostManagerSheet from './PostManagerSheet';
+import Colors from '../../../constants/Colors';
 
 const BottomSheetContainer: React.FC = () => {
     const [snapPoints, setSnapPoints] = useState(['10%', '50%']);
@@ -34,6 +35,8 @@ const BottomSheetContainer: React.FC = () => {
             onChange={handleSheetChanges}
             enablePanDownToClose
             backdropComponent={BottomSheetBackdrop}
+            backgroundStyle={{ backgroundColor: Colors.slightlyDark }}
+            handleIndicatorStyle={{ backgroundColor: Colors.white }}
         >
             {name === 'PostManager' ? <PostManagerSheet setSnapPoints={setSnapPoints} data={data} /> : null}
         </BottomSheetModal>

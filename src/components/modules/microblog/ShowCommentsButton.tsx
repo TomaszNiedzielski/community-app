@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import Colors from '../../../constants/Colors';
 import { PostProps, setAllComments } from '../../../redux/posts';
 import { RootState } from '../../../redux/store';
 import api from '../../../utils/api';
@@ -47,7 +46,6 @@ const ShowCommentsButton: React.FC<Props> = ({ commentsCount, postId }) => {
 const styles = StyleSheet.create({
     container: {
         borderWidth: 1,
-        // borderColor: Colors.gray,
         alignSelf: 'center',
         padding: 3,
         borderRadius: 4,
@@ -56,7 +54,6 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 12,
-        // color: Colors.gray,
         width: 130,
         textAlign: 'center',
     },
