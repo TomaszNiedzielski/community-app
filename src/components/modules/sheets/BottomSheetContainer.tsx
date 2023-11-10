@@ -5,6 +5,7 @@ import { RootState } from '../../../redux/store';
 import { closeSheet } from '../../../redux/sheet';
 import PostManagerSheet from './PostManagerSheet';
 import Colors from '../../../constants/Colors';
+import UserSettingsSheet from './UserSettingsSheet';
 
 const BottomSheetContainer: React.FC = () => {
     const [snapPoints, setSnapPoints] = useState(['10%', '50%']);
@@ -39,6 +40,7 @@ const BottomSheetContainer: React.FC = () => {
             handleIndicatorStyle={{ backgroundColor: Colors.white }}
         >
             {name === 'PostManager' ? <PostManagerSheet setSnapPoints={setSnapPoints} data={data} /> : null}
+            {name === 'UserSettings' ? <UserSettingsSheet setSnapPoints={setSnapPoints} data={data} /> : null}
         </BottomSheetModal>
     );
 }

@@ -15,7 +15,6 @@ const MainNavigator: React.FC = () => {
             screenOptions={{
                 tabBarInactiveBackgroundColor: Colors.slightlyDark,
                 tabBarActiveBackgroundColor: Colors.slightlyDark,
-                tabBarShowLabel: false,
             }}
         >
             <Tab.Screen
@@ -41,6 +40,7 @@ const MainNavigator: React.FC = () => {
                 component={UserNavigator}
                 options={{
                     headerShown: false,
+                    title: 'User',
                     tabBarIcon: ({ focused }) => <FontAwesomeIcon name="user" size={20} color={focused ? Colors.primary : Colors.lightGray} />,
                 }}
             />

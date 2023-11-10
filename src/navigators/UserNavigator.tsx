@@ -3,6 +3,9 @@ import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-na
 import { getFocusedRouteNameFromRoute, RouteProp } from '@react-navigation/native';
 import Colors from '../constants/Colors';
 import UserScreen from '../screens/user/UserScreen';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { useDispatch } from 'react-redux';
+import { openSheet } from '../redux/sheet';
 
 const Stack = createNativeStackNavigator();
 
@@ -12,6 +15,8 @@ interface Props {
 }
 
 const UserNavigator: React.FC<Props> = ({ route, navigation }) => {
+    const dispatch = useDispatch();
+
     useLayoutEffect(() => {
         const routeName = getFocusedRouteNameFromRoute(route);
         if (routeName === 'SearchContacts' || routeName === 'Chat') {
@@ -20,6 +25,10 @@ const UserNavigator: React.FC<Props> = ({ route, navigation }) => {
             navigation.setOptions({ tabBarStyle: { display: 'flex' } } as any);
         }
     }, [navigation, route]);
+
+    const openUserSettingsSheet = () => {
+        dispatch(openSheet({ value: true, name: 'UserSettings' }));
+    }
 
     return (
         <Stack.Navigator
@@ -33,6 +42,11 @@ const UserNavigator: React.FC<Props> = ({ route, navigation }) => {
             <Stack.Screen
                 name="User"
                 component={UserScreen}
+                options={{
+                    headerRight: () => (
+                        <Icon name="settings-sharp" size={20} color={Colors.white} onPress={openUserSettingsSheet} />
+                    ),
+                }}
             />
         </Stack.Navigator>
     );

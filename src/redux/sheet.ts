@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 interface Sheet {
     isVisible: boolean;
-    name: 'PostManager' | null;
+    name: 'PostManager' | 'UserSettings' | null;
     data: any;
 }
 

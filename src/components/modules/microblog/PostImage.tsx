@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { View, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import ScalableImage from '../../common/ScalableImage';
+import Colors from '../../../constants/Colors';
 
 const renderShadow = () => {
     const views = [];
@@ -11,7 +12,7 @@ const renderShadow = () => {
         views.push(
             <View
                 key={i}
-                style={{ height: 1, backgroundColor: '#fff', opacity }}
+                style={{ height: 1, backgroundColor: Colors.dark, opacity }}
             />
         );
     }

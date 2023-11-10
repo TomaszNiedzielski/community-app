@@ -65,10 +65,10 @@ export interface UserProps {
 }
 
 const initialState: UserProps = {
-    id: 1,
-    name: 'Admin',
-    email: 'tomasz9531@gmail.com',
-    token: '110|60iQl8EvCqDzkY400AyWUX94aWHERx7V6tSQ6l3P',
+    id: 0,
+    name: '',
+    email: '',
+    token: '',
     avatar: {
         url: '',
         pending: false
