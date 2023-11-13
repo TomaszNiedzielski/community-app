@@ -15,6 +15,7 @@ const MainNavigator: React.FC = () => {
             screenOptions={{
                 tabBarInactiveBackgroundColor: Colors.slightlyDark,
                 tabBarActiveBackgroundColor: Colors.slightlyDark,
+                tabBarActiveTintColor: Colors.gray
             }}
         >
             <Tab.Screen
@@ -22,8 +23,8 @@ const MainNavigator: React.FC = () => {
                 component={MicroblogNavigator}
                 options={{
                     headerShown: false,
-                    title: 'Microblog',
-                    tabBarIcon: ({ focused }) => <Icon name="home" size={20} color={focused ? Colors.primary : Colors.lightGray} />,
+                    title: 'Home',
+                    tabBarIcon: ({ focused }) => <Icon name="home" size={20} color={focused ? Colors.gray : Colors.lightGray} />,
                 }}
             />
             <Tab.Screen
@@ -32,7 +33,7 @@ const MainNavigator: React.FC = () => {
                 options={{
                     headerShown: false,
                     title: 'Chat',
-                    tabBarIcon: ({ focused }) => <MaterialCommunityIconsIcon name="chat" size={20} color={focused ? Colors.primary : Colors.lightGray} />,
+                    tabBarIcon: ({ focused }) => <MaterialCommunityIconsIcon name="chat" size={20} color={focused ? Colors.gray : Colors.lightGray} />,
                 }}
             />
             <Tab.Screen
@@ -41,7 +42,7 @@ const MainNavigator: React.FC = () => {
                 options={{
                     headerShown: false,
                     title: 'User',
-                    tabBarIcon: ({ focused }) => <FontAwesomeIcon name="user" size={20} color={focused ? Colors.primary : Colors.lightGray} />,
+                    tabBarIcon: ({ focused }) => <FontAwesomeIcon name="user" size={20} color={focused ? Colors.gray : Colors.lightGray} />,
                 }}
             />
         </Tab.Navigator>

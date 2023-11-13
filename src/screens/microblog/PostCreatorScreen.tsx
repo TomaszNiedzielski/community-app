@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import PrimaryContainer from '../../components/common/PrimaryContainer';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import api from '../../utils/api';
+import api, { ApiError, ApiResponse, showErrors } from '../../utils/api';
 import { createPost } from '../../redux/posts';
 import ImagePicker from 'react-native-image-crop-picker';
 import FullScreenLoader from '../../components/common/FullScreenLoader';
@@ -34,7 +34,7 @@ const PostCreatorScreen: React.FC<Props> = ({ navigation }) => {
             text,
             image: imageFile,
         }, token)
-        .then((res: any) => {
+        .then((res: ApiResponse) => {
             if (res.data.error) {
                 Alert.alert('', res.data.message);
                 return;
@@ -48,6 +48,9 @@ const PostCreatorScreen: React.FC<Props> = ({ navigation }) => {
             setImageName('');
 
             navigation.navigate('Microblog');
+        })
+        .catch((err: ApiError) => {
+            showErrors(err);
         })
         .finally(() => setIsLoading(false));
     }

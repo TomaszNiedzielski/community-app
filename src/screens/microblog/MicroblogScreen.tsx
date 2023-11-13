@@ -32,7 +32,7 @@ const MicroblogScreen: React.FC<Props> = ({ route, navigation }) => {
     }, []);
 
     useEffect(() => {
-        if (route.params?.action !== 'NO_LOADING') {
+        if (token) {
             dispatch(resetPage('microblog'));
             getPosts();
         }

@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import Contact, { Props as ContactProps } from '../../components/modules/chat/Contact';
 import { useFocusEffect } from '@react-navigation/native';
+import NetInfoAlert from '../../components/common/NetInfoAlert';
 
 const RecentMessagesScreen: React.FC = () => {
     const { token } = useSelector((state: RootState) => state.user);
@@ -36,6 +37,7 @@ const RecentMessagesScreen: React.FC = () => {
                 onRefresh={fetchRecentMessages}
                 refreshing={isRefreshing}
             />
+            <NetInfoAlert />
         </PrimaryContainer>
     );
 }

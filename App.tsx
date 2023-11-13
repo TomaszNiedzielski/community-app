@@ -15,6 +15,8 @@ import changeNavigationBarColor from 'react-native-navigation-bar-color';
 import { StatusBar } from 'react-native';
 import AuthNavigator from './src/navigators/AuthNavigator';
 import PrimaryContainer from './src/components/common/PrimaryContainer';
+import FlashMessage from 'react-native-flash-message';
+import { DefaultTheme } from '@react-navigation/native';
 
 const Stack = createNativeStackNavigator();
 
@@ -52,7 +54,15 @@ const AppContent: React.FC = () => {
         return (
             <GestureHandlerRootView style={{ flex: 1 }}>
                 <BottomSheetModalProvider>
-                    <NavigationContainer>
+                    <NavigationContainer
+                        theme={{
+                            ...DefaultTheme,
+                            colors: {
+                                ...DefaultTheme.colors,
+                                border: Colors.slightlyDark
+                            },
+                        }}
+                    >
                         <Stack.Navigator>
                             {!token ? <Stack.Screen
                                 name="Auth"
@@ -68,6 +78,7 @@ const AppContent: React.FC = () => {
                         <BottomSheetContainer />
                     </NavigationContainer>
                 </BottomSheetModalProvider>
+                <FlashMessage position="top" />
             </GestureHandlerRootView>
         );
     }

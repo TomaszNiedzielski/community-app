@@ -19,6 +19,7 @@ import { RootState } from '../../../redux/store';
 import { Pusher, PusherEvent } from '@pusher/pusher-websocket-react-native';
 import api, { ApiResponse } from '../../../utils/api';
 import Icon from 'react-native-vector-icons/Ionicons';
+import NetInfo from '@react-native-community/netinfo';
 
 interface Props {
     channelToken: string;
@@ -27,18 +28,29 @@ interface Props {
 const Chat: React.FC<Props> = ({ channelToken }) => {
     const [messages, setMessages] = useState<IMessage[]>([]);
     const { id: userId, token } = useSelector((state: RootState) => state.user);
+    const [isOnline, setIsOnline] = useState(false);
+
+    const fetchMessages = async () => {
+        api.get(`/messages?channelToken=${channelToken}`, token)
+        .then((res: ApiResponse) => {
+            if (res.data.messages) {
+                setMessages(res.data.messages);
+            }
+        });
+    }
 
     useEffect(() => {
-        const fetchMessages = async () => {
-            api.get(`/messages?channelToken=${channelToken}`, token)
-            .then((res: ApiResponse) => {
-                if (res.data.messages) {
-                    setMessages(res.data.messages);
-                }
-            });
+        if (isOnline) {
+            fetchMessages();
         }
+    }, [isOnline]);
 
-        fetchMessages();
+    useEffect(() => {
+        const unsubscribe = NetInfo.addEventListener(async state => {
+            setIsOnline(state.isConnected ? true : false);
+        });
+
+        return () => unsubscribe();
     }, []);
 
     useEffect(() => {

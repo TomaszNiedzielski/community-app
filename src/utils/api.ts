@@ -2,6 +2,7 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 import { API_URL } from '../constants/Api';
 import { getDeviceId } from '../storage/device';
 import DeviceInfo from 'react-native-device-info';
+import { showMessage } from 'react-native-flash-message';
 
 export const config = (token?: string) => {
     return {
@@ -31,6 +32,7 @@ class Api {
                 resolve(res.data);
             })
             .catch((e: AxiosError) => {
+                showErrors(e);
                 reject(e);
             });
         });
@@ -103,6 +105,26 @@ class Api {
 
     protected prepareFinalUrl(url: string) {
         return url + (url.includes('?') ? '&' : '?') + 'deviceId=' + this.deviceId + '&appVersion=' + this.appVersion;
+    }
+}
+
+export const showErrors = (err: ApiError) => {
+    if (err.code === 'ERR_NETWORK') {
+        showMessage({
+            message: 'You have no internet connection.',
+            type: 'danger',
+            icon: 'auto',
+            duration: 2500
+        });
+    }
+
+    if (err.code === 'ERR_BAD_RESPONSE') {
+        showMessage({
+            message: 'Sorry an error has occured. Try again later.',
+            type: 'danger',
+            icon: 'auto',
+            duration: 2500
+        });
     }
 }
 
