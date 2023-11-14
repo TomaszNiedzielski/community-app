@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import { FlatList, ActivityIndicator, StyleSheet } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RouteProp } from '@react-navigation/native';
 import { ThunkDispatch } from '@reduxjs/toolkit';
 import { useDispatch, useSelector } from 'react-redux';
 import PrimaryContainer from '../../components/common/PrimaryContainer';
@@ -10,26 +9,16 @@ import Colors from '../../constants/Colors';
 import { fetchPosts, resetPage } from '../../redux/posts';
 import { RootState } from '../../redux/store';
 import NetInfoAlert from '../../components/common/NetInfoAlert';
-import Icon from 'react-native-vector-icons/Feather';
 
 interface Props {
     navigation: NativeStackNavigationProp<any>;
-    route: RouteProp<any>;
 }
 
-const MicroblogScreen: React.FC<Props> = ({ route, navigation }) => {
+const MicroblogScreen: React.FC<Props> = ({ navigation }) => {
     const posts = useSelector((state: RootState) => state.posts);
     const token = useSelector((state: RootState) => state.user.token);
 
     const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
-
-    useEffect(() => {
-        navigation.setOptions({
-            headerRight: () => (
-                <Icon name="plus" size={30} color={Colors.white} onPress={() => navigation.navigate('PostCreator')} />
-            )
-        });
-    }, []);
 
     useEffect(() => {
         if (token) {

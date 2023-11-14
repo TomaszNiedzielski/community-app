@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, KeyboardAvoidingView, ScrollView, Platform, Text } from 'react-native';
+import { View, Text } from 'react-native';
 import PrimaryButton from '../../components/common/PrimaryButton';
 import PrimaryContainer from '../../components/common/PrimaryContainer';
 import DeviceInfo from 'react-native-device-info';
@@ -8,11 +8,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from '../../redux/user';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootState } from '../../redux/store';
-// import { showMessage } from 'react-native-flash-message';
-import NetInfo from '@react-native-community/netinfo';
-import api, { ApiError, ApiResponse } from '../../utils/api';
+import api, { ApiError, ApiResponse, showErrors } from '../../utils/api';
 import { styles } from './RegisterScreen';
 import FormInput from '../../components/common/FormInput';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 interface Props {
     navigation: NativeStackNavigationProp<any>;
@@ -51,17 +50,6 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
         // Device name for token session
         const deviceName = await DeviceInfo.getDeviceName();
 
-        // Check internet connection
-        const netState = await NetInfo.fetch();
-        if (!netState.isConnected) {
-            // showMessage({
-            //     message: 'You have no internet connection.',
-            //     type: 'danger',
-            //     icon: 'auto',
-            //     duration: 2500
-            // });
-        }
-
         api.post('/login', {
             email,
             password,
@@ -76,6 +64,8 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
             }
         })
         .catch((err: ApiError) => {
+            showErrors(err);
+
             const data: any = err.response?.data;
             const { email, password } = data.errors;
             setEmailError(email);
@@ -89,46 +79,41 @@ const LoginScreen: React.FC<Props> = ({ navigation }) => {
 
     return (
         <PrimaryContainer>
-            <KeyboardAvoidingView
-                behavior={Platform.OS === "ios" ? "padding" : "height"}
-                style={{ flex: 1 }}
-            >
-                <ScrollView keyboardShouldPersistTaps="always" contentContainerStyle={{ paddingBottom: 50 }}>
-                    <View style={styles.container}>
-                        <FormInput
-                            onChangeText={setEmail}
-                            value={email}
-                            placeholder="Type email..."
-                            style={styles.input}
-                            errorMessage={emailError}
-                            keyboardType="email-address"
-                            autoCapitalize="none"
-                            label="Email"
-                        />
-                        <FormInput
-                            onChangeText={setPassword}
-                            value={password}
-                            placeholder="Type password..."
-                            style={styles.input}
-                            errorMessage={passwordError}
-                            secureTextEntry
-                            label="Password"
-                        />
-                        <PrimaryButton
-                            title="Login"
-                            style={styles.btn}
-                            onPress={onSubmit}
-                            isLoading={isLoading}
-                        />
-                        <Text style={styles.btnLoginText}>New here?</Text>
-                        <PrimaryButton
-                            title="Sign up"
-                            style={styles.btnLogin}
-                            onPress={() => navigation.navigate('Register')}
-                        />
-                    </View>
-                </ScrollView>
-            </KeyboardAvoidingView>
+            <KeyboardAwareScrollView keyboardShouldPersistTaps="always">
+                <View style={styles.container}>
+                    <FormInput
+                        onChangeText={setEmail}
+                        value={email}
+                        placeholder="Type email..."
+                        style={styles.input}
+                        errorMessage={emailError}
+                        keyboardType="email-address"
+                        autoCapitalize="none"
+                        label="Email"
+                    />
+                    <FormInput
+                        onChangeText={setPassword}
+                        value={password}
+                        placeholder="Type password..."
+                        style={styles.input}
+                        errorMessage={passwordError}
+                        secureTextEntry
+                        label="Password"
+                    />
+                    <PrimaryButton
+                        title="Log In"
+                        style={styles.btn}
+                        onPress={onSubmit}
+                        isLoading={isLoading}
+                    />
+                    <Text style={styles.btnLoginText}>New here?</Text>
+                    <PrimaryButton
+                        title="Sign up"
+                        style={styles.btnLogin}
+                        onPress={() => navigation.navigate('Register')}
+                    />
+                </View>
+            </KeyboardAwareScrollView>
         </PrimaryContainer>
     );
 }

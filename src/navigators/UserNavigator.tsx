@@ -1,4 +1,5 @@
 import { useLayoutEffect } from 'react';
+import { TouchableOpacity } from 'react-native';
 import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { getFocusedRouteNameFromRoute, RouteProp } from '@react-navigation/native';
 import Colors from '../constants/Colors';
@@ -34,7 +35,7 @@ const UserNavigator: React.FC<Props> = ({ route, navigation }) => {
         <Stack.Navigator
             screenOptions={{
                 headerStyle: {
-                    backgroundColor: Colors.slightlyDark,
+                    backgroundColor: Colors.dark,
                 },
                 headerTintColor: Colors.white
             }}
@@ -44,7 +45,9 @@ const UserNavigator: React.FC<Props> = ({ route, navigation }) => {
                 component={UserScreen}
                 options={{
                     headerRight: () => (
-                        <Icon name="settings-sharp" size={20} color={Colors.white} onPress={openUserSettingsSheet} />
+                        <TouchableOpacity onPress={openUserSettingsSheet} hitSlop={{ top: 15, left: 15, right: 15, bottom: 15 }}>
+                            <Icon name="settings-sharp" size={20} color={Colors.white} />
+                        </TouchableOpacity>
                     ),
                 }}
             />

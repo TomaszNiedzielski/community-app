@@ -9,6 +9,7 @@ import { PostProps, createComment, updatePost } from '../../redux/posts';
 import PrimaryContainer from '../../components/common/PrimaryContainer';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Colors from '../../constants/Colors';
+import FullScreenLoader from '../../components/common/FullScreenLoader';
 
 interface Props {
     route: RouteProp<any>;
@@ -18,6 +19,7 @@ const PostScreen: React.FC<Props> = ({ route }) => {
     const [comment, setComment] = useState('');
     const [image, setImage] = useState(''); // base64
     const [post, setPost] = useState<PostProps>();
+    const [isSendingComment, setIsSendingComment] = useState(false);
 
     const { token } = useSelector((state: RootState) => state.user);
     const postMicroblog = useSelector((state: RootState) => state.posts.microblog.data.find(({ id }) => id === route.params?.postId));
@@ -43,6 +45,8 @@ const PostScreen: React.FC<Props> = ({ route }) => {
     const sendComment = () => {
         if (comment === '' && image === '') return;
 
+        setIsSendingComment(true);
+
         api.post('/posts', {
             text: comment,
             image,
@@ -60,7 +64,8 @@ const PostScreen: React.FC<Props> = ({ route }) => {
             setComment('');
             setImage('');
             commentInputRef.current?.blur();
-        });
+        })
+        .finally(() => setIsSendingComment(false));
     }
 
     const onReply = (post: PostProps) => {
@@ -100,11 +105,12 @@ const PostScreen: React.FC<Props> = ({ route }) => {
                     />
                     {comment.length ? <Icon name="send" size={30} style={styles.sendIcon} onPress={sendComment} /> : null}
                 </View>
+                <FullScreenLoader visible={isSendingComment} />
             </PrimaryContainer>
         );
     }
     
-    return null;
+    return <PrimaryContainer><></></PrimaryContainer>;
 }
 
 const styles = StyleSheet.create({

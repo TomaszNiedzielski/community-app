@@ -18,6 +18,7 @@ const ManageButton: React.FC<Props> = ({ postId }) => {
             onPress={() => {
                 dispatch(openSheet({ value: true, name: 'PostManager', data: { postId } }));
             }}
+            style={{ marginTop: 5 }}
         >
             <Icon name="dots-three-vertical" size={14} color={Colors.gray} />
         </TouchableOpacity>

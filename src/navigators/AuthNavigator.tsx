@@ -10,7 +10,7 @@ const AuthNavigator: React.FC = () => {
         <Stack.Navigator
             screenOptions={{
                 headerStyle: {
-                    backgroundColor: Colors.slightlyDark,
+                    backgroundColor: Colors.dark,
                 },
                 headerTintColor: Colors.white
             }}
@@ -18,10 +18,16 @@ const AuthNavigator: React.FC = () => {
             <Stack.Screen
                 name="Login"
                 component={LoginScreen}
+                options={{
+                    title: 'Log In'
+                }}
             />
             <Stack.Screen
                 name="Register"
                 component={RegisterScreen}
+                options={{
+                    title: 'Sign Up'
+                }}
             />
         </Stack.Navigator>
     );

@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { View, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, Text } from 'react-native';
+import { View, StyleSheet, Text } from 'react-native';
 import PrimaryButton from '../../components/common/PrimaryButton';
 import PrimaryContainer from '../../components/common/PrimaryContainer';
 import FormInput from '../../components/common/FormInput';
 import { storeUser } from '../../storage/user';
-import NetInfo from '@react-native-community/netinfo';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUser } from '../../redux/user';
 import DeviceInfo from 'react-native-device-info';
 import { RootState } from '../../redux/store';
-// import { showMessage } from 'react-native-flash-message';
-import api, { ApiError, ApiResponse } from '../../utils/api';
+import api, { ApiError, ApiResponse, showErrors } from '../../utils/api';
 import { validateName } from '../../utils/validations';
 import Colors from '../../constants/Colors';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 interface Props {
     navigation: NativeStackNavigationProp<any>;
@@ -58,16 +57,6 @@ const RegisterScreen: React.FC<Props> = ({ navigation }) => {
 
         const deviceName = await DeviceInfo.getDeviceName();
 
-        const netState = await NetInfo.fetch();
-        if (!netState.isConnected) {
-            // showMessage({
-            //     message: 'You have no internet connection.',
-            //     type: 'danger',
-            //     icon: 'auto',
-            //     duration: 2500
-            // });
-        }
-
         api.post('/register', {
             name,
             email,
@@ -83,6 +72,8 @@ const RegisterScreen: React.FC<Props> = ({ navigation }) => {
             }
         })
         .catch((err: ApiError) => {
+            showErrors(err);
+
             const data: any = err.response?.data;
             const { name, email, password } = data.errors;
             setNameError(name);
@@ -98,55 +89,50 @@ const RegisterScreen: React.FC<Props> = ({ navigation }) => {
 
     return (
         <PrimaryContainer>
-            <KeyboardAvoidingView
-                behavior={Platform.OS === "ios" ? "padding" : "height"}
-                style={{ flex: 1 }}
-            >
-                <ScrollView keyboardShouldPersistTaps="always" contentContainerStyle={{ paddingBottom: 50 }}>
-                    <View style={styles.container}>
-                        <FormInput
-                            onChangeText={setName}
-                            value={name}
-                            placeholder="Type name..."
-                            style={styles.input}
-                            errorMessage={nameError}
-                            label="Name"
-                            autoCapitalize="none"
-                        />
-                        <FormInput
-                            onChangeText={setEmail}
-                            value={email}
-                            placeholder="Type email..."
-                            style={styles.input}
-                            errorMessage={emailError}
-                            keyboardType="email-address"
-                            autoCapitalize="none"
-                            label="Email"
-                        />
-                        <FormInput
-                            onChangeText={setPassword}
-                            value={password}
-                            placeholder="Type password..."
-                            style={styles.input}
-                            errorMessage={passwordError}
-                            secureTextEntry
-                            label="Password"
-                        />
-                        <PrimaryButton
-                            title="Register"
-                            style={styles.btn}
-                            onPress={onSubmit}
-                            isLoading={isLoading}
-                        />
-                        <Text style={styles.btnLoginText}>Already have an account?</Text>
-                        <PrimaryButton
-                            title="Log In"
-                            style={styles.btnLogin}
-                            onPress={() => navigation.navigate('Login')}
-                        />
-                    </View>
-                </ScrollView>
-            </KeyboardAvoidingView>
+            <KeyboardAwareScrollView keyboardShouldPersistTaps="always">
+                <View style={styles.container}>
+                    <FormInput
+                        onChangeText={setName}
+                        value={name}
+                        placeholder="Type name..."
+                        style={styles.input}
+                        errorMessage={nameError}
+                        label="Name"
+                        autoCapitalize="none"
+                    />
+                    <FormInput
+                        onChangeText={setEmail}
+                        value={email}
+                        placeholder="Type email..."
+                        style={styles.input}
+                        errorMessage={emailError}
+                        keyboardType="email-address"
+                        autoCapitalize="none"
+                        label="Email"
+                    />
+                    <FormInput
+                        onChangeText={setPassword}
+                        value={password}
+                        placeholder="Type password..."
+                        style={styles.input}
+                        errorMessage={passwordError}
+                        secureTextEntry
+                        label="Password"
+                    />
+                    <PrimaryButton
+                        title="Sign Up"
+                        style={styles.btn}
+                        onPress={onSubmit}
+                        isLoading={isLoading}
+                    />
+                    <Text style={styles.btnLoginText}>Already have an account?</Text>
+                    <PrimaryButton
+                        title="Log In"
+                        style={styles.btnLogin}
+                        onPress={() => navigation.navigate('Login')}
+                    />
+                </View>
+            </KeyboardAwareScrollView>
         </PrimaryContainer>
     );
 }

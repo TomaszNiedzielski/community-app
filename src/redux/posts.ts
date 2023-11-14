@@ -102,7 +102,10 @@ const postsSlice = createSlice({
             function handleTask(storeName: DataProperties) {
                 const post = state[storeName].data.find(({ id }) => id === action.payload.postId);
 
-                post?.comments?.items.push(action.payload.comment);
+                if (post) {
+                    post.comments.items.push(action.payload.comment);
+                    post.comments.count++;
+                }
             }
             
             handleTask('microblog');

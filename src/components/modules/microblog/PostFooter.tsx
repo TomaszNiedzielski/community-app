@@ -28,7 +28,7 @@ const PostFooter: React.FC<Props> = ({ onReply, onOpen, postId, postAuthorId, vi
                     hitSlop={styles.hitSlop}
                     onPress={onOpen}
                 >
-                    <IconFontAwesome name="comments" size={16} color={Colors.gray} />
+                    <IconFontAwesome name="comments" size={14} color={Colors.gray} />
                     <Text style={styles.title}>{commentsCount}</Text>
                 </TouchableOpacity>}
 
@@ -37,12 +37,12 @@ const PostFooter: React.FC<Props> = ({ onReply, onOpen, postId, postAuthorId, vi
                     hitSlop={styles.hitSlop}
                     onPress={onReply}
                 >
-                    <IconEntypo name="reply" size={16} color={Colors.gray} />
+                    <IconEntypo name="reply" size={14} color={Colors.gray} />
                     <Text style={styles.title}>Reply</Text>
                 </TouchableOpacity>
 
                 {viewsCount !== undefined && <View style={styles.itemWrapper}>
-                    <IconFontAwesome name="eye" size={16} color={Colors.black} />
+                    <IconFontAwesome name="eye" size={14} color={Colors.black} />
                     <Text style={styles.title}>{viewsCount}</Text>
                 </View>}
             </View>
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     },
     title: {
         color: Colors.gray,
-        fontSize: 10,
+        fontSize: 9,
         marginLeft: 8,
         fontWeight: '500',
     },

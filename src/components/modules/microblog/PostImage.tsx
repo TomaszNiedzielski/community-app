@@ -12,7 +12,7 @@ const renderShadow = () => {
         views.push(
             <View
                 key={i}
-                style={{ height: 1, backgroundColor: Colors.dark, opacity }}
+                style={{ height: 1, backgroundColor: Colors.white, opacity }}
             />
         );
     }

@@ -46,8 +46,8 @@ const AppContent: React.FC = () => {
     useEffect(() => { authenticateUser() }, []);
 
     useEffect(() => {
-        changeNavigationBarColor(Colors.slightlyDark);
-        StatusBar.setBackgroundColor(Colors.slightlyDark);
+        changeNavigationBarColor(Colors.black);
+        StatusBar.setBackgroundColor(Colors.dark);
     }, []);
 
     if (isUserRestored) {

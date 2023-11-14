@@ -6,7 +6,7 @@ import Colors from '../../constants/Colors';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../redux/store';
 import PrimaryContainer from '../../components/common/PrimaryContainer';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import api, { ApiError, ApiResponse, showErrors } from '../../utils/api';
 import { createPost } from '../../redux/posts';
 import ImagePicker from 'react-native-image-crop-picker';
