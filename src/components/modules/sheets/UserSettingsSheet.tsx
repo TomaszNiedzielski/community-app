@@ -5,6 +5,7 @@ import { BottomSheetContentProps } from './BottomSheetContainer';
 import { useDispatch } from 'react-redux';
 import { closeSheet } from '../../../redux/sheet';
 import { logoutUser } from '../../../storage/user';
+import { resetState } from '../../../redux/posts';
 
 const UserSettingsSheet: React.FC<BottomSheetContentProps> = ({ setSnapPoints }) => {
     const dispatch = useDispatch<any>();
@@ -24,6 +25,7 @@ const UserSettingsSheet: React.FC<BottomSheetContentProps> = ({ setSnapPoints })
                 text: 'OK', onPress: () => {
                     logoutUser();
                     dispatch(closeSheet());
+                    dispatch(resetState());
                 }
             },
         ]);

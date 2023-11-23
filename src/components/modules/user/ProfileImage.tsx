@@ -9,14 +9,17 @@ const ProfileImage: React.FC = () => {
     const { name, avatar, token } = useSelector((state: RootState) => state.user);
     const dispatch = useDispatch<any>();
 
-    const handleAvatarChange = () => {
-        ImagePicker.openPicker({
+    const handleAvatarChange = async () => {
+        const selectedImage = await ImagePicker.openPicker({
+            mediaType: 'photo',
+        });
+
+        ImagePicker.openCropper({
+            path: selectedImage.path,
             width: 144,
             height: 144,
-            cropping: true,
-            cropperCircleOverlay: true,
-            includeBase64: true,
             mediaType: 'photo',
+            includeBase64: true,
         })
         .then(image => {
             if (image.data) {

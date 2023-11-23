@@ -173,6 +173,9 @@ const postsSlice = createSlice({
 
             state[storeName].page = 1;
             state[storeName].isLastPage = false;
+        },
+        resetState: () => {
+            return initialState;
         }
     },
     extraReducers: (builder: ActionReducerMapBuilder<typeof initialState>) => {
@@ -251,7 +254,7 @@ const postsSlice = createSlice({
     }
 });
 
-export const { createPost, createComment, likeThePost, setAllComments, updatePost, resetPage } = postsSlice.actions;
+export const { createPost, createComment, likeThePost, setAllComments, updatePost, resetPage, resetState } = postsSlice.actions;
 
 export default postsSlice.reducer;
 
