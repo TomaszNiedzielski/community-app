@@ -4,11 +4,14 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MicroblogNavigator from './MicroblogNavigator';
 import Icon from 'react-native-vector-icons/Entypo';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import IoniconsIcon from 'react-native-vector-icons/Ionicons';
 import Colors from '../constants/Colors';
 import UserNavigator from './UserNavigator';
 import PostCreatorScreen from '../screens/microblog/PostCreatorScreen';
 import { getFocusedRouteNameFromRoute, RouteProp } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import ChatNavigator from './ChatNavigator';
+import NotificationsScreen from '../screens/NotificationsScreen';
 
 interface Props {
     navigation: NativeStackNavigationProp<any>;
@@ -46,6 +49,15 @@ const MainNavigator: React.FC<Props> = ({ route, navigation }) => {
                 }}
             />
             <Tab.Screen
+                name="ChatNavigator"
+                component={ChatNavigator}
+                options={{
+                    headerShown: false,
+                    title: 'Chat',
+                    tabBarIcon: ({ focused }) => <Icon name="chat" size={20} color={focused ? Colors.lightGray : Colors.gray} />,
+                }}
+            />
+            <Tab.Screen
                 name="PostCreator"
                 component={PostCreatorScreen}
                 options={{
@@ -55,6 +67,17 @@ const MainNavigator: React.FC<Props> = ({ route, navigation }) => {
                     tabBarStyle: {
                         display: 'none'
                     }
+                }}
+            />
+            <Tab.Screen
+                name="Notifications"
+                component={NotificationsScreen}
+                options={{
+                    tabBarIcon: ({ focused }) => <IoniconsIcon name="notifications" size={20} color={focused ? Colors.lightGray : Colors.gray} />,
+                    headerStyle: {
+                        backgroundColor: Colors.dark,
+                    },
+                    headerTintColor: Colors.white
                 }}
             />
             <Tab.Screen

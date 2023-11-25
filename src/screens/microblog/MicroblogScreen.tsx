@@ -1,6 +1,7 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import { FlatList, ActivityIndicator, StyleSheet } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RouteProp, useFocusEffect } from '@react-navigation/native';
 import { ThunkDispatch } from '@reduxjs/toolkit';
 import { useDispatch, useSelector } from 'react-redux';
 import PrimaryContainer from '../../components/common/PrimaryContainer';
@@ -12,23 +13,29 @@ import NetInfoAlert from '../../components/common/NetInfoAlert';
 
 interface Props {
     navigation: NativeStackNavigationProp<any>;
+    route: RouteProp<any>;
 }
 
-const MicroblogScreen: React.FC<Props> = ({ navigation }) => {
+const MicroblogScreen: React.FC<Props> = ({ navigation, route }) => {
     const posts = useSelector((state: RootState) => state.posts);
     const token = useSelector((state: RootState) => state.user.token);
 
     const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
 
-    useEffect(() => {
-        if (token) {
-            dispatch(resetPage('microblog'));
-            getPosts();
-        }
-    }, [token]);
+    useFocusEffect(
+        useCallback(() => {
+            if ((route.name !== 'MicroblogHome' && '#'+posts.microblog.tag !== route.name) || (route.name === 'MicroblogHome' && route.name !== posts.microblog.tag)) {
+                dispatch(resetPage('microblog'));
+                getPosts();
+            }
+        }, [posts.microblog.tag, route.name]),
+    );
 
     const getPosts = () => {
-        dispatch(fetchPosts({ token: token }));
+        dispatch(fetchPosts({
+            token,
+            tag: route.name.replace('#', '')
+        }));
     }
 
     const renderPostItem = useMemo(() => {

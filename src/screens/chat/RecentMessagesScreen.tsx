@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { FlatList, StyleSheet } from 'react-native';
+import { FlatList, StyleSheet, Text } from 'react-native';
 import PrimaryContainer from '../../components/common/PrimaryContainer';
 import api, { ApiResponse } from '../../utils/api';
 import { useSelector } from 'react-redux';
@@ -7,6 +7,7 @@ import { RootState } from '../../redux/store';
 import Contact, { Props as ContactProps } from '../../components/modules/chat/Contact';
 import { useFocusEffect } from '@react-navigation/native';
 import NetInfoAlert from '../../components/common/NetInfoAlert';
+import Colors from '../../constants/Colors';
 
 const RecentMessagesScreen: React.FC = () => {
     const { token } = useSelector((state: RootState) => state.user);
@@ -31,12 +32,12 @@ const RecentMessagesScreen: React.FC = () => {
 
     return (
         <PrimaryContainer style={styles.container}>
-            <FlatList
+            {contacts.length ? <FlatList
                 data={contacts}
                 renderItem={({ item }) => <Contact {...item} />}
                 onRefresh={fetchRecentMessages}
                 refreshing={isRefreshing}
-            />
+            /> : <Text style={styles.title}>No messages!</Text>}
             <NetInfoAlert />
         </PrimaryContainer>
     );
@@ -45,6 +46,11 @@ const RecentMessagesScreen: React.FC = () => {
 const styles = StyleSheet.create({
     container: {
         padding: 10,
+    },
+    title: {
+        color: Colors.gray,
+        textAlign: 'center',
+        paddingVertical: 30,
     }
 });
 

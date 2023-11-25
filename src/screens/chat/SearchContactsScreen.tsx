@@ -70,6 +70,7 @@ const SearchContactsScreen: React.FC<Props> = ({ navigation }) => {
             <FlatList
                 data={searchResults}
                 renderItem={({ item }) => <ContactSearchResult {...item} />}
+                keyboardShouldPersistTaps="always"
             />
         </PrimaryContainer>
     );

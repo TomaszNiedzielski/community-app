@@ -1,9 +1,9 @@
 import { useLayoutEffect } from 'react';
 import { createNativeStackNavigator, NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { getFocusedRouteNameFromRoute, RouteProp } from '@react-navigation/native';
-import MicroblogScreen from '../screens/microblog/MicroblogScreen';
 import PostScreen from '../screens/microblog/PostScreen';
 import Colors from '../constants/Colors';
+import TagNavigator from './TagNavigator';
 
 const Stack = createNativeStackNavigator();
 
@@ -32,8 +32,11 @@ const MicroblogNavigator: React.FC<Props> = ({ route, navigation }) => {
             }}
         >
             <Stack.Screen
-                name="Microblog"
-                component={MicroblogScreen}
+                name="TagNavigator"
+                component={TagNavigator}
+                options={{
+                    headerShown: false,
+                }}
             />
             <Stack.Screen
                 name="Post"

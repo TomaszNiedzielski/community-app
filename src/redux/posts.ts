@@ -5,20 +5,22 @@ import { RootState } from './store';
 interface FetchPostsProps {
     id?: number;
     token?: string;
+    tag?: string;
 }
 
 export const fetchPosts = createAsyncThunk(
     'posts/fetchPosts',
-    async ({ id, token }: FetchPostsProps, { getState }) => {
+    async ({ id, token, tag }: FetchPostsProps, { getState }) => {
         const { posts } = getState() as RootState;
 
-        const response: any = await api.get(`/posts/${id || '?page=' + posts['microblog'].page}`, token);
+        const response: any = await api.get(`/posts/${id || '?page=' + posts['microblog'].page}&tag=${tag === 'MicroblogHome' ? '' : tag}`, token);
 
-        if (id) {
-            return response.data;
+        return {
+            data: response.data.data || response.data,
+            currentPage: response.data.current_page,
+            lastPage: response.data.last_page,
+            tag,
         }
-
-        return response.data.data;
     }
 );
 
@@ -71,6 +73,7 @@ export interface PostsStore {
     reloading: boolean;
     page: number;
     isLastPage: boolean;
+    tag?: string;
 }
 
 const initialPostsStore: PostsStore = {
@@ -79,6 +82,7 @@ const initialPostsStore: PostsStore = {
     reloading: false,
     page: 1,
     isLastPage: false,
+    tag: '',
 }
 
 const initialState = {
@@ -188,16 +192,19 @@ const postsSlice = createSlice({
                 }
             })
             .addCase(fetchPosts.fulfilled, (state, action) => {
+                const response = action.payload;
+
                 state['microblog'].reloading = false;
                 state['microblog'].loading = false;
-                
-                if (action.payload.length === 0) {
+
+                if (response.currentPage === response.lastPage) {
                     state['microblog'].isLastPage = true;
-                } else {
-                    let newPosts = state['microblog'].page === 1 ? action.payload : [...state['microblog'].data, ...action.payload];
-                    state['microblog'].data = removePostDuplicates(newPosts);
-                    state['microblog'].page++;
                 }
+
+                let newPosts = (state['microblog'].page === 1 || state['microblog'].tag !== response.tag) ? response.data : [...state['microblog'].data, ...response.data];
+                state['microblog'].data = removePostDuplicates(newPosts);
+                state['microblog'].page++;
+                state['microblog'].tag = response.tag;
             })
             .addCase(fetchPosts.rejected, (state) => {
                 state['microblog'].reloading = false;

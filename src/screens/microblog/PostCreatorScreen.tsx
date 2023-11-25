@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { View, TextInput, StyleSheet, Text, TouchableWithoutFeedback, Keyboard, TouchableOpacity, Alert } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -11,6 +11,7 @@ import api, { ApiError, ApiResponse, showErrors } from '../../utils/api';
 import { createPost } from '../../redux/posts';
 import ImagePicker from 'react-native-image-crop-picker';
 import FullScreenLoader from '../../components/common/FullScreenLoader';
+import TagSelector from '../../components/modules/postCreator/TagSelector';
 
 interface Props {
     navigation: NativeStackNavigationProp<any>;
@@ -21,6 +22,7 @@ const PostCreatorScreen: React.FC<Props> = ({ navigation }) => {
     const [imageFile, setImageFile] = useState(''); // base64
     const [imageName, setImageName] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [tags, setTags] = useState<string[]>([]);
 
     const { token } = useSelector((state: RootState) => state.user);
     const dispatch = useDispatch();
@@ -47,7 +49,7 @@ const PostCreatorScreen: React.FC<Props> = ({ navigation }) => {
             setImageFile('');
             setImageName('');
 
-            navigation.navigate('Microblog');
+            navigation.navigate('MicroblogNavigator');
         })
         .catch((err: ApiError) => {
             showErrors(err);
@@ -87,6 +89,38 @@ const PostCreatorScreen: React.FC<Props> = ({ navigation }) => {
         setImageName('');
     }
 
+    const findTagsInText = () => {
+        const words = text.split(' ');
+        const tags = words.filter(word => word[0] === '#');
+        return tags;
+    }
+
+    useEffect(() => {
+        setTags(findTagsInText());
+    }, [text]);
+
+    const handleTagsChange = (tags: string[]) => {
+        const tagsInText = findTagsInText();
+
+        let differenceToRemove = tagsInText.filter(x => !tags.includes(x));
+        let updatedText = text;
+        differenceToRemove.map(diff => {
+            updatedText = updatedText.replaceAll(' ' + diff, '');
+            updatedText = updatedText.replaceAll(diff, '');
+        });
+        setText(updatedText);
+
+        let difference = tags.filter(x => !tagsInText.includes(x));
+        let differenceTags = '';
+        difference.map((tag) => {
+            differenceTags += ' ' + tag;
+        });
+
+        if (differenceTags) {
+            setText(text => text.concat(differenceTags));
+        }
+    }
+
     return (
         <PrimaryContainer style={styles.container}>
             <FullScreenLoader visible={isLoading} />
@@ -108,6 +142,10 @@ const PostCreatorScreen: React.FC<Props> = ({ navigation }) => {
                                 cursorColor={Colors.white}
                             />
                         </KeyboardAwareScrollView>
+                        <TagSelector
+                            onChange={handleTagsChange}
+                            selectedTags={tags}
+                        />
                         {imageName ? <View style={styles.imageItem}>
                             <Text style={styles.imageName}>{imageName}</Text>
                             <Icon name="remove" color={Colors.red} size={26} onPress={rejectImage} />

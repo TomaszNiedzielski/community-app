@@ -28,7 +28,7 @@ const ChatNavigator: React.FC<Props> = ({ route, navigation }) => {
         <Stack.Navigator
             screenOptions={{
                 headerStyle: {
-                    backgroundColor: Colors.slightlyDark,
+                    backgroundColor: Colors.dark,
                 },
                 headerTintColor: Colors.white
             }}
@@ -40,7 +40,7 @@ const ChatNavigator: React.FC<Props> = ({ route, navigation }) => {
                     headerRight: () => (
                         <Icon name="search" size={20} color={Colors.white} onPress={() => navigation.navigate('SearchContacts')} />
                     ),
-                    title: 'Recent Messages',
+                    title: 'Messages',
                 }}
             />
             <Stack.Screen
