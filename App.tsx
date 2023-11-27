@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Provider, useDispatch, useSelector } from 'react-redux';
@@ -17,6 +17,10 @@ import AuthNavigator from './src/navigators/AuthNavigator';
 import PrimaryContainer from './src/components/common/PrimaryContainer';
 import FlashMessage from 'react-native-flash-message';
 import { DefaultTheme } from '@react-navigation/native';
+import messaging from '@react-native-firebase/messaging';
+import { useNetInfo } from '@react-native-community/netinfo';
+import api from './src/utils/api';
+import { getDeviceId } from './src/storage/device';
 
 const Stack = createNativeStackNavigator();
 
@@ -33,6 +37,7 @@ const AppContent: React.FC = () => {
     const [isUserRestored, setIsUserRestored] = useState(false);
 
     const dispatch = useDispatch<ThunkDispatch<any, any, any>>();
+    const netInfo = useNetInfo();
 
     const authenticateUser = async () => {
         const user = await restoreUser();
@@ -49,6 +54,40 @@ const AppContent: React.FC = () => {
         changeNavigationBarColor(Colors.black);
         StatusBar.setBackgroundColor(Colors.dark);
     }, []);
+
+    // Notifications
+    useEffect(() => {
+        (async () => {
+            const deviceInfo = await getDeviceInfo;
+
+            const onAppBootstrap = async () => {
+                // Register the device with FCM
+                await messaging().registerDeviceForRemoteMessages();
+        
+                if (netInfo.isConnected) {
+                    await updateFirebaseToken(deviceInfo);
+                }
+            }
+
+            onAppBootstrap();
+        })();
+    }, [netInfo.isConnected, token]);
+
+    messaging().onTokenRefresh(async () => {
+        const deviceInfo = await getDeviceInfo;
+        updateFirebaseToken(deviceInfo);
+    });
+
+    const getDeviceInfo = useMemo(async () => {
+        const deviceId = await getDeviceId();
+        const firebaseToken = await messaging().getToken();
+
+        return { deviceId, firebaseToken };
+    }, []);
+
+    const updateFirebaseToken = async ({ deviceId, firebaseToken }: any) => {
+        api.post('/device/token', { deviceId, token: firebaseToken }, token);
+    }
 
     if (isUserRestored) {
         return (

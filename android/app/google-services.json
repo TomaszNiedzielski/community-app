@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "680889649436",
+    "project_id": "communityapp-91ab5",
+    "storage_bucket": "communityapp-91ab5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:680889649436:android:53317178fc11c4932812d9",
+        "android_client_info": {
+          "package_name": "com.fuzja_apps.communityapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBMtr0a-SZIfen-n5XUF7vb14kvtThcJuc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

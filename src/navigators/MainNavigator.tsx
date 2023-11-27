@@ -1,4 +1,4 @@
-import { useLayoutEffect } from 'react';
+import { useEffect, useLayoutEffect } from 'react';
 import { StatusBar } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MicroblogNavigator from './MicroblogNavigator';
@@ -12,6 +12,7 @@ import { getFocusedRouteNameFromRoute, RouteProp } from '@react-navigation/nativ
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import ChatNavigator from './ChatNavigator';
 import NotificationsScreen from '../screens/NotificationsScreen';
+import messaging from '@react-native-firebase/messaging';
 
 interface Props {
     navigation: NativeStackNavigationProp<any>;
@@ -29,6 +30,41 @@ const MainNavigator: React.FC<Props> = ({ route, navigation }) => {
             StatusBar.setBackgroundColor(Colors.dark);
         }
     }, [navigation, route]);
+
+    useEffect(() => {
+        messaging().onNotificationOpenedApp((message: any) => {
+            const action = JSON.parse(message.data.action);
+
+            if (action.name === 'OPEN_CHAT_SCREEN') {
+                navigation.reset({
+                    index: 0,
+                    routes: [
+                        {
+                            name: 'Home',
+                            state: {
+                                routes: [
+                                    {
+                                        name: 'ChatNavigator',
+                                        state: {
+                                            routes: [
+                                                {
+                                                    name: 'RecentMessages',
+                                                },
+                                                {
+                                                    name: 'Chat',
+                                                    params: action.params
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                });
+            }
+        });
+    }, []);
 
     return (
         <Tab.Navigator
