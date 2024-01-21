@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Colors from '../../../constants/Colors';
 
-export const tags = ['#anxiety', '#depression', '#loneliness', '#addictions', '#relationships', '#bullying'];
+export const tags = ['#tag1', '#tag2', '#tag3', '#tag4', '#tag5', '#tag6', '#tag7', '#tag8'];
 
 interface TagProps {
     name: string;
